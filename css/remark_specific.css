@@ -38,6 +38,10 @@ h1, h2, h3 {
   line-height: 1.5em;
 }
 
+ul {
+    list-style-image: url('../img/32px_scionics_logo_green.png');
+}
+
 /* @page { */
 /*     size: 1210px 681px; */
 /*     margin: 0; */
