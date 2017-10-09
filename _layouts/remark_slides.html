@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>{{ page.title | strip_html }}</title>
+   
+    <!-- Main CSS file for almost all the content -->
+    <link rel="stylesheet" type="text/css" href="css/default.css" />
+    <!-- Special CSS changes to make the site looks more as we are looking for -->
+    <link rel="stylesheet" type="text/css" href="css/scionics_styles.css" />
+    
+    <!-- Boilerplate CSS to glue Scionics layout to remark slides -->
+    <link rel="stylesheet" type="text/css" href="css/remark_specific.css" />
+        
+
+  </head>
+  <body>
+    <textarea id="source">
+{{ content }}
+    </textarea>
+    <script src="/js/remark.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        navigation: {scroll: false},
+        ratio: "16:9",
+        highlightStyle: 'github'
+      });
+    </script>
+  </body>
+
+<!--
+class center middle
+class center middle inverse
+```html
+```ruby
+
+als erste Zeilen in Slide
+-->
