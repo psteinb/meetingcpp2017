@@ -11,16 +11,32 @@ h1, h2, h3 {
     color: #1b8377;
 }
 
-.remark-code, .remark-inline-code {
-    font-family: 'Aller Regular';
-}
+.remark-slide-content,.remark-code,.remark-inline-code {
 
-.remark-slide-content,.remark-code {
-    font-size: 28px;
+    font-family: 'Aller Regular';
+    font-size: 48px;
+    line-height: 1.5em;
+
 }
 
 .inverse { background: #111; color: #eee; text-shadow: 0 0 20px #f00;}
 .inverse a{color: #eee;}
+
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+.title-slide h1 {
+    color: #1b8377;
+    font-weight: bold;
+    text-shadow: none;
+    /* margin-top: 150px; */
+}
+
+.title-slide h2, .title-slide h3 {
+  color: #666;
+  line-height: 1.5em;
+}
 
 /* @page { */
 /*     size: 1210px 681px; */
