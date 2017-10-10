@@ -1,6 +1,7 @@
 /* @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz); */
 /* @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic); */
 
+
 body {
     font-family: 'Aller Regular';
 }
@@ -14,8 +15,8 @@ h1, h2, h3 {
 .remark-slide-content,.remark-code,.remark-inline-code {
 
     font-family: 'Aller Regular';
-    font-size: 48px;
-    line-height: 1.5em;
+    font-size: 36px;
+    line-height: 1.3em;
 
 }
 
@@ -35,7 +36,7 @@ h1, h2, h3 {
 
 .title-slide h2, .title-slide h3 {
   color: #666;
-  line-height: 1.5em;
+  line-height: 1.25em;
 }
 
 ul {

@@ -27,8 +27,8 @@ body {
 
 @font-face {
   font-family: 'Aller Regular';
-    src: url('../font/Aller-Regular.eot');
-    src: local("Aller Regular"), url('font/Aller-Regular.ttf');
+    src: url('../fonts/Aller-Regular.eot');
+    src: local("Aller Regular"), url('../fonts/Aller-Regular.ttf');
 }
 
 /* ----  START TRANSITIONAL HEADER IN INDEX  ---- */
