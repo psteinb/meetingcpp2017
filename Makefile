@@ -1,10 +1,15 @@
-all : serve
+PANDOC ?= pandoc
 
-serve :
-	bundle exec jekyll serve
+# Pandoc filters.
+FILTERS = $(wildcard tools/filters/*.py)
+
+all : index.htm
+
+tools/filters/linkTable : tools/filters/linkTable.hs
+	ghc $<
+
+index.htm : slides.md 
+	$(PANDOC) -s --template=pandoc-revealjs.template -t revealjs -o $@ -V transition=slide --section-divs --filter tools/filters/columnfilter.py $<
 
 clean :
-	bundle exec jekyll clean
-
-build :
-	bundle exec jekyll build
+	rm -f links.md index.htm?
