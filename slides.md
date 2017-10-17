@@ -1,16 +1,10 @@
 ---
-layout: remark_slides
 title: The Performance Addict's Toolbox
-name: Peter Steinbach
-date: 2017-11-10 14:30:00
+author: Peter Steinbach
+origin: Scionics Computer Innovation GmbH
+email: steinbach@scionics.de
+date: Nov 11, 2017, MeetingC++ 2017, Berlin
 ---
-
-# The Performance Addict's Toolbox
-
-## Peter Steinbach <br> Scionics Computer Innovation GmbH
-
-### Meeting C++ 2017, Nov 10, Berlin
-
 
 # Agenda 
 
@@ -25,11 +19,11 @@ date: 2017-11-10 14:30:00
 
 .container-fluid[
 
-.row[
+.row align-items-center[
 
 .col[
 
-![map of East Germany](img/events_header_m_quarter.jpg)
+![map of East Germany](img/events_header_m_quarter.jpg){ class="figure-img img-fluid" width="60%" }
 
 .]
 
