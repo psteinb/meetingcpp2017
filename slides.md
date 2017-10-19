@@ -7,7 +7,7 @@ date: Nov 11, 2017, MeetingC++ 2017, Berlin
 ---
 
 
-# Agenda 
+## Agenda 
 
 
 1. `whoami` and Motivation
@@ -27,7 +27,7 @@ date: Nov 11, 2017, MeetingC++ 2017, Berlin
 
 .col[
 
-![map of East Germany](img/events_header_m_quarter.jpg){ class="figure-img img-fluid" width="60%" }
+![](img/events_header_m_quarter.jpg){ class="figure-img img-fluid" width="60%" }
 
 .]
 
@@ -64,7 +64,9 @@ NEXT: biggest client = CBG
 
 .col[
 
-![Max Planck Institute for Molecular Cell Biology and Genetics, &nbsp; [mpi-cbg.de](www.mpi-cbg.de) ](img/800px-MPI-CBG_building_outside_4pl.jpg){ class="figure-img img-fluid" width="60%" }
+![Max Planck Institute for Molecular Cell Biology and Genetics](img/800px-MPI-CBG_building_outside_4pl.jpg){ class="figure-img img-fluid" width="60%" }  
+
+[mpi-cbg.de](www.mpi-cbg.de)
 
 .]
 
