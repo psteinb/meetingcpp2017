@@ -18,7 +18,9 @@ date: Nov 11, 2017, MeetingC++ 2017, Berlin
 
 # whoami and Motivation
 
+
 ## Disclaimer
+
 
 .container-fluid[
 
@@ -90,7 +92,7 @@ report bugs and questions there!
 
 .col[
 
-![MPI for Molecular Cell Biology and Genetics](img/800px-MPI-CBG_building_outside_4pl.jpg){ class="figure-img img-fluid" width="100%" }  
+![MPI for Molecular Cell Biology and Genetics](img/800px-MPI-CBG_building_outside_4pl.jpg){ class="figure-img img-fluid" width="100%" }
 
 [mpi-cbg.de](www.mpi-cbg.de)
 
@@ -113,17 +115,12 @@ report bugs and questions there!
 :notes[
 
 - biggest client
+- NEXT: How does my day look like sometimes ...
 
 :]
 
 
 # Performance Outside-In
-
-:notes[
-
-- application running in a shell (aka the server)
-
-:]
 
 
 ## One day as a Performance Engineer
@@ -154,7 +151,7 @@ To: hpcsupport@theinstitute.de
 Hi,
 
 what is going on with the cluster? My application is running
-slow since yesterday. 
+slow since yesterday.
 Could you have a look at it please?
 
 Thanks,
@@ -179,6 +176,10 @@ John
 
 
 
+## Challenge: Find the cause of the performance regression without looking at the code {  data-background-image="img/binary-958952_1920_greybackground.jpg" }
+
+
+
 ## High Level Overview
 
 
@@ -188,16 +189,160 @@ John
 
 .col[
 
-![[htop](http://hisham.hm/htop/), [free](https://linux.die.net/man/1/free) et al](img/htop_in_action.png){ class="figure-img img-fluid" width="50%" }  
+![[htop](http://hisham.hm/htop/), [free](https://linux.die.net/man/1/free) et al](img/htop_in_action.png){ class="figure-img img-fluid" width="90%" }
 
 .]
 
 .col[
 
-![Task Manager, [Image](https://en.wikipedia.org/wiki/File:Win7-tskman-perf.png) courtesy of Fergie4000, CC-BY 3.0](img/Win7-tskman-perf.png)){ class="figure-img img-fluid" width="50%" }  
+![Task Manager, [Image](https://en.wikipedia.org/wiki/File:Win7-tskman-perf.png) courtesy of Fergie4000, CC-BY 3.0](img/Win7-tskman-perf.png){ class="figure-img img-fluid" width="80%" }
 
 .]
 
 .]
 
 .]
+
+
+## Reference Numbers
+
+```
+$ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
+2+0 records in
+2+0 records out
+2147483648 bytes (2.1 GB) copied, 2.94478 s, 729 MB/s
+
+$ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
+2+0 records in
+2+0 records out
+2147483648 bytes (2.1 GB) copied, 1.14782 s, 1.9 GB/s
+```
+
+&nbsp;
+
+**What can your hardware typically do?**  
+
+`dd`, `iperf`, `memhog`, ...
+
+
+:notes[
+
+- to search for the bottleneck, know your performance
+
+]
+
+
+## Profile with [perf](https://perf.wiki.kernel.org/index.php/Main_Page)
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col-8[
+
+
+```
+$ perf record -g ./my-slow-binary
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.023 MB perf.data (75 samples) ]
+$ perf report --stdio
+no symbols found in /usr/bin/dd, maybe install a debug package?
+# ...
+# Total Lost Samples: 0
+#
+# Samples: 75  of event 'cycles:u'
+# Event count (approx.): 1839654
+#
+# Children      Self  Command  Shared Object      Symbol           
+# ........  ........  .......  .................  ................
+#
+    20.18%    20.18%  dd       [kernel.kallsyms]  [k] page_fault
+            |          
+             --19.77%--0
+                       _int_realloc
+                       page_fault
+
+```
+
+  .]
+
+  .col-4[
+
+  - instrument CPU performance counters, tracepoints and system probes
+  - lightweight sample based profiling 
+  - per task, per CPU and per-workload counters
+  - on windows: [xperf](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal)
+  
+  .]
+
+.]
+
+.]
+
+
+## [perf](https://perf.wiki.kernel.org/index.php/Main_Page) Reloaded with [FlameGraphs](https://github.com/brendangregg/FlameGraph)
+
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col-8[
+
+
+```
+$ perf record -g ./my-slow-binary
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.023 MB perf.data (75 samples) ]
+$ perf script > out.perf
+$ ./stackcollapse-perf.pl out.perf > out.folded
+$ ./flamegraph.pl out.folded > perf_samples.svg
+```
+
+  .]
+
+  .col-4[
+
+  - visualisation technique conceived by [Brendan Gregg](https://github.com/brendangregg) (Netflix)
+  - seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...
+  - based on collected perf samples and the stacktrace they were collected in
+  
+  .]
+
+.]
+
+.]
+
+
+## Starting Java as FlameGraph
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col-8[
+  
+  ![](img/flamegraph_bash.svg){ class="figure-img img-fluid" }
+
+  .]
+
+  .col-4[
+
+  - (x axis) current stack level in alphabetical order  
+  
+  - (y axis) number of samples in that stacktrace level
+  
+  .]
+
+.]
+
+.]
+
+
+:notes[
+
+- overwhelming at first
+
+
+
+:]

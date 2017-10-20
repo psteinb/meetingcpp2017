@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="css/theme/black.css" id="theme">
     $endif$
 
+    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
+
     $if(highlighting-css)$
     <style type="text/css">
       $highlighting-css$

@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="css/reveal.css"/>
         <link rel="stylesheet" href="css/theme/black.css" id="theme">
     
+    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
+
         <link rel="stylesheet" href="lib/css/zenburn.css">
     
     <!-- <link rel="stylesheet" href="my_reveal_overrides.css"/> -->
@@ -47,10 +49,8 @@
 	  <h3 class="date">Nov 11, 2017, MeetingC++ 2017, Berlin</h3>
 	</section>
 		
-	<section class="slide level1">
-
-<section id="agenda" class="level2">
-<h2>Agenda</h2>
+	<section id="agenda" class="slide level2">
+<h1>Agenda</h1>
 <ol type="1">
 <li><code>whoami</code> and Motivation</li>
 <li>Performance outside-in</li>
@@ -58,11 +58,8 @@
 <li>Benchmarks and how to create them</li>
 </ol>
 </section>
-</section>
-<section id="whoami-and-motivation" class="slide level1">
-<h1>whoami and Motivation</h1>
-<section id="disclaimer" class="level2">
-<h2>Disclaimer</h2>
+<section><section id="whoami-and-motivation" class="titleslide slide level1"><h1>whoami and Motivation</h1></section><section id="disclaimer" class="slide level2">
+<h1>Disclaimer</h1>
 <div class="container-fluid">
 <div class="row justify-content-center">
 <div class="col">
@@ -76,9 +73,8 @@
 <aside class="notes">
 <p>report bugs and questions there!</p>
 </aside>
-</section>
-<section id="whoami" class="level2">
-<h2><code>whoami</code></h2>
+</section><section id="whoami" class="slide level2">
+<h1><code>whoami</code></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -103,9 +99,8 @@
 <li>NEXT: biggest client = CBG</li>
 </ul>
 </aside>
-</section>
-<section id="our-client" class="level2">
-<h2>Our Client</h2>
+</section><section id="our-client" class="slide level2">
+<h1>Our Client</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -127,19 +122,12 @@
 <aside class="notes">
 <ul>
 <li>biggest client</li>
+<li>NEXT: How does my day look like sometimes ...</li>
 </ul>
 </aside>
-</section>
-</section>
-<section id="performance-outside-in" class="slide level1">
-<h1>Performance Outside-In</h1>
-<aside class="notes">
-<ul>
-<li>application running in a shell (aka the server)</li>
-</ul>
-</aside>
-<section id="one-day-as-a-performance-engineer" class="level2">
-<h2>One day as a Performance Engineer</h2>
+</section></section>
+<section><section id="performance-outside-in" class="titleslide slide level1"><h1>Performance Outside-In</h1></section><section id="one-day-as-a-performance-engineer" class="slide level2">
+<h1>One day as a Performance Engineer</h1>
 <figure>
 <img src="img/flickr_ORourke_2_busy_to_improve_1200px.png" alt="Alan O&#39;Rourke, Too Busy To Improve - Performance Management - Square Wheels, CC" class="figure-img img-fluid" style="width:70.0%" /><figcaption>Alan O'Rourke, <a href="https://www.flickr.com/photos/toddle_email_newsletters/15412982829/in/photostream/">Too Busy To Improve - Performance Management - Square Wheels</a>, CC</figcaption>
 </figure>
@@ -149,9 +137,8 @@
 <li>performance is important for usablity</li>
 </ul>
 </aside>
-</section>
-<section id="once-in-a-while" class="level2" data-background-image="img/frustration-cry-1682140_1920.jpg">
-<h2>Once in a while</h2>
+</section><section id="once-in-a-while" class="slide level2" data-background-image="img/frustration-cry-1682140_1920.jpg">
+<h1>Once in a while</h1>
 <div class="container">
 <div class="row align-items-center">
 <div class="col">
@@ -163,7 +150,7 @@ To: hpcsupport@theinstitute.de
 Hi,
 
 what is going on with the cluster? My application is running
-slow since yesterday. 
+slow since yesterday.
 Could you have a look at it please?
 
 Thanks,
@@ -179,23 +166,118 @@ John</code></pre>
 <li>https://youtu.be/FnGCDLhaxKU?t=6152</li>
 </ul>
 </aside>
-</section>
-<section id="high-level-overview" class="level2">
-<h2>High Level Overview</h2>
+</section><section id="challenge-find-the-cause-of-the-performance-regression-without-looking-at-the-code" class="slide level2" data-background-image="img/binary-958952_1920_greybackground.jpg">
+<h1>Challenge: Find the cause of the performance regression without looking at the code</h1>
+</section><section id="high-level-overview" class="slide level2">
+<h1>High Level Overview</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
 <figure>
-<img src="img/htop_in_action.png" alt="htop, free et al" class="figure-img img-fluid" style="width:50.0%" /><figcaption><a href="http://hisham.hm/htop/">htop</a>, <a href="https://linux.die.net/man/1/free">free</a> et al</figcaption>
+<img src="img/htop_in_action.png" alt="htop, free et al" class="figure-img img-fluid" style="width:90.0%" /><figcaption><a href="http://hisham.hm/htop/">htop</a>, <a href="https://linux.die.net/man/1/free">free</a> et al</figcaption>
 </figure>
 </div>
 <div class="col">
-<p><img src="img/Win7-tskman-perf.png" alt="Task Manager, Image courtesy of Fergie4000, CC-BY 3.0" />){ class=&quot;figure-img img-fluid&quot; width=&quot;50%&quot; }</p>
+<figure>
+<img src="img/Win7-tskman-perf.png" alt="Task Manager, Image courtesy of Fergie4000, CC-BY 3.0" class="figure-img img-fluid" style="width:80.0%" /><figcaption>Task Manager, <a href="https://en.wikipedia.org/wiki/File:Win7-tskman-perf.png">Image</a> courtesy of Fergie4000, CC-BY 3.0</figcaption>
+</figure>
 </div>
 </div>
 </div>
-</section>
-</section>
+</section><section id="reference-numbers" class="slide level2">
+<h1>Reference Numbers</h1>
+<pre><code>$ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
+2+0 records in
+2+0 records out
+2147483648 bytes (2.1 GB) copied, 2.94478 s, 729 MB/s
+
+$ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
+2+0 records in
+2+0 records out
+2147483648 bytes (2.1 GB) copied, 1.14782 s, 1.9 GB/s</code></pre>
+<p> </p>
+<p><strong>What can your hardware typically do?</strong></p>
+<p><code>dd</code>, <code>iperf</code>, <code>memhog</code>, ...</p>
+<aside class="notes">
+<ul>
+<li>to search for the bottleneck, know your performance</li>
+</ul>
+<p>]</p>
+</section><section id="profile-with-perf" class="slide level2">
+<h1>Profile with <a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<pre><code>$ perf record -g ./my-slow-binary
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.023 MB perf.data (75 samples) ]
+$ perf report --stdio
+no symbols found in /usr/bin/dd, maybe install a debug package?
+# ...
+# Total Lost Samples: 0
+#
+# Samples: 75  of event &#39;cycles:u&#39;
+# Event count (approx.): 1839654
+#
+# Children      Self  Command  Shared Object      Symbol           
+# ........  ........  .......  .................  ................
+#
+    20.18%    20.18%  dd       [kernel.kallsyms]  [k] page_fault
+            |          
+             --19.77%--0
+                       _int_realloc
+                       page_fault
+</code></pre>
+</div>
+<div class="col-4">
+<ul>
+<li>instrument CPU performance counters, tracepoints and system probes</li>
+<li>lightweight sample based profiling</li>
+<li>per task, per CPU and per-workload counters</li>
+<li>on windows: <a href="https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal">xperf</a></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="perf-reloaded-with-flamegraphs" class="slide level2">
+<h1><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> Reloaded with <a href="https://github.com/brendangregg/FlameGraph">FlameGraphs</a></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<pre><code>$ perf record -g ./my-slow-binary
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.023 MB perf.data (75 samples) ]
+$ perf script &gt; out.perf
+$ ./stackcollapse-perf.pl out.perf &gt; out.folded
+$ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
+</div>
+<div class="col-4">
+<ul>
+<li>visualisation technique conceived by <a href="https://github.com/brendangregg">Brendan Gregg</a> (Netflix)</li>
+<li>seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...</li>
+<li>based on collected perf samples and the stacktrace they were collected in</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="starting-java-as-flamegraph" class="slide level2">
+<h1>Starting Java as FlameGraph</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/flamegraph_bash.svg" class="figure-img img-fluid" />
+</figure>
+</div>
+<div class="col-4">
+<ul>
+<li>current stack level of sample is order alphabetically (x axis)</li>
+<li>number of samples in that stacktrace level (y axis)</li>
+</ul>
+</div>
+</div>
+</div>
+</section></section>
       </div>
     </div>
 

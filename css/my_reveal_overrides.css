@@ -1,0 +1,12 @@
+/* remove borders of images */
+.reveal section img { background:none; border:none; box-shadow:none; }
+
+.reveal pre code {
+    /* display: block; */
+    /* padding: 5px; */
+    /* overflow: auto; */
+    /* max-height: 700px; */
+    max-height: 80%;
+    /* word-wrap: normal; */
+
+}
