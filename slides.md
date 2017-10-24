@@ -314,24 +314,64 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 .]
 
 
-## Starting Java as FlameGraph
+## Ethereum Mining [as FlameGraph](figure/flamegraph/ethminer-cuda-simulate.svg)
 
 .container-fluid[
 
 .row align-items-center[
 
-  .col-8[
+  .col[
   
-  ![](img/flamegraph_bash.svg){ class="figure-img img-fluid" }
+  <object type="image/svg+xml" data="figure/flamegraph/ethminer-cuda-simulate.svg" width="90%">
+  Your browser does not support SVG
+  </object>
 
   .]
 
-  .col-4[
+.]
+
+.]
+
+
+.container-fluid[
+
+.row align-items-start[
+
+  .col[
 
   - (x axis) current stack level in alphabetical order  
   
-  - (y axis) number of samples in that stacktrace level
+  .]
+
+  .col[
   
+  - (y axis) number of samples in that stacktrace level
+
+  .]
+
+.]
+
+.]
+
+:notes[
+
+- alphetical ordering inside each stacktrace level
+
+:]
+
+
+## HPC user's slow application
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  <object type="image/svg+xml" data="figure/flamegraph/hpc_user.svg" width="90%">
+  Your browser does not support SVG
+  </object>
+
   .]
 
 .]
@@ -341,8 +381,15 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 
 :notes[
 
-- overwhelming at first
+- performance profile shows i/o spinning wildly
+- storage hardware was malfunctioning
+- this graph = cpu_cycles; alternative = i/o flamegraph
 
-
+- **so far**: didn't touch the source code or build it
 
 :]
+
+
+# performance inside-out
+
+## 
