@@ -1,14 +1,15 @@
 # using gprof
 
-1. Install [gcc](https://gcc.gnu.org) or clang 
-2. make gperftools available through your environment
-3. Compile your code and link to libprofiler.so/.dll. With this repo (Linux and macOS supported) do 
+1. Install [gcc](https://gcc.gnu.org) or [clang](https://clang.llvm.org/) 
+2. Compile your code and use the `-pg` flag. With this repo (Linux and macOS supported) do 
 ```
 $ make 
 $ ./vector_unroll_example
+```
+3. Convert the created `gmon.out` to something digestable
+```
 $ gprof ./vector_unroll_example gmon.out > analysis.txt
 ```
-
 
 ## Credits
 

@@ -285,8 +285,34 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 </div>
 <aside class="notes">
 <ul>
-<li>overwhelming at first</li>
 <li>alphetical ordering inside each stacktrace level</li>
+</ul>
+</aside>
+</section><section id="hpc-users-slow-application" class="slide level2">
+<h1>HPC user's slow application</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<p><object type="image/svg+xml" data="figure/flamegraph/hpc_user.svg" width="90%"> Your browser does not support SVG </object></p>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>performance profile shows i/o spinning wildly</li>
+<li>storage hardware was malfunctioning</li>
+<li><p>this graph = cpu_cycles; alternative = i/o flamegraph</p></li>
+<li><p><strong>so far</strong>: didn't touch the source code or build it</p></li>
+</ul>
+</aside>
+</section></section>
+<section><section id="performance-inside-out" class="titleslide slide level1" data-background-image="img/Spirit_of_St._Louis_Jacksonville_Florida_wikicommons.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"><h1>Performance Inside-Out</h1></section><section id="high-diversity-of-tools" class="slide level2" data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
+<h1>High Diversity of Tools!</h1>
+<aside class="notes">
+<ul>
+<li>tricky to recommend one only</li>
+<li>tricky to find cross platform one</li>
+<li>typical: develop/profile on one platform, choose deploy on all</li>
 </ul>
 </aside>
 </section></section>
@@ -329,7 +355,7 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
       { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
             { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
             { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }//,
       //          { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
       //          { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       ]});

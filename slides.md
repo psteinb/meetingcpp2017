@@ -390,6 +390,17 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 :]
 
 
-# performance inside-out
+# Performance Inside-Out {  data-background-image="img/Spirit_of_St._Louis_Jacksonville_Florida_wikicommons.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
 
-## 
+
+## High Diversity of Tools! { data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"}
+
+:notes[
+
+- tricky to recommend one only
+- tricky to find cross platform one
+- typical: develop/profile on one platform, choose deploy on all
+- now: brief tour
+
+:]
+
