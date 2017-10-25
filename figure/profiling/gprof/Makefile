@@ -1,4 +1,4 @@
-CXXFLAGS?=-O2 -lprofiler
+CXXFLAGS?=-O2 -pg
 
 all : vector_unroll_example
 
