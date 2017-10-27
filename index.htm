@@ -644,6 +644,122 @@ int main(int argc, char** argv){
 </section></section>
 <section><section id="benchmarks-and-how-to-create-them" class="titleslide slide level1"><h1>Benchmarks and how to create them</h1></section><section id="chrono-is-your-friend" class="slide level2">
 <h1>chrono is your friend</h1>
+<pre><code>#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &quot;production_code.hpp&quot;
+#include &quot;new_ideas.hpp&quot;
+
+int main(int argc, char** argv){
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto result = production_code::algorithm();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    auto new_result = new_ideas::algorithm();
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_i = (end - start);
+
+    std::cout &lt;&lt; &quot;we achieved a speed-up of &quot; &lt;&lt; t_p.count()/t_i.count() 
+              &lt;&lt; std::endl;
+}</code></pre>
+</section><section id="check-for-correctness" class="slide level2">
+<h1>... check for correctness</h1>
+<pre><code>#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &quot;production_code.hpp&quot;
+#include &quot;new_ideas.hpp&quot;
+
+int main(int argc, char** argv){
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto result = production_code::algorithm();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    auto new_result = new_ideas::algorithm();
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_i = (end - start);
+
+    if(result == new_result)
+        std::cout &lt;&lt; &quot;we achieved a speed-up of &quot; &lt;&lt; t_p.count()/t_i.count() 
+                  &lt;&lt; std::endl;
+    else
+        std::cout &lt;&lt; &quot;Never mind!&quot; &lt;&lt; std::endl;
+}</code></pre>
+</section><section id="noisy-lab-under-your-fingers" class="slide level2">
+<h1>noisy lab under your fingers</h1>
+<pre><code>#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &quot;production_code.hpp&quot;
+#include &quot;new_ideas.hpp&quot;
+
+int main(int argc, char** argv){
+
+    auto result = 0;
+    auto new_result = 0;
+    
+    auto start = std::chrono::high_resolution_clock::now();
+
+    for(int i = 0;i&lt;n_repititions;++i)
+        result = production_code::algorithm();
+   
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    
+    for(int i = 0;i&lt;n_repititions;++i)
+        new_result = new_ideas::algorithm();
+        
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration&lt;double&gt; t_i = (end - start);
+
+    if(result == new_result)
+        std::cout &lt;&lt; &quot;we achieved a speed-up of &quot; &lt;&lt; t_p.count()/t_i.count() 
+                  &lt;&lt; std::endl;
+    else
+        std::cout &lt;&lt; &quot;Never mind!&quot; &lt;&lt; std::endl;
+}</code></pre>
+</section><section id="please-take-notes" class="slide level2">
+<h1>Please take notes</h1>
+<pre><code>#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &lt;ifstream&gt;
+#include &quot;production_code.hpp&quot;
+#include &quot;new_ideas.hpp&quot;
+
+using duration_t = std::chrono::duration&lt;double&gt;;
+
+int main(int argc, char** argv){
+    //..
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = start;
+    std::vector&lt;duration_t&gt; my_timings(n_repititions);
+
+    for(int i = 0;i&lt;n_repititions;++i){
+        start = std::chrono::high_resolution_clock::now();
+        result = production_code::algorithm();
+        my_timings[i] = std::chrono::high_resolution_clock::now() - start;
+    }
+   
+    //same with new_idea
+
+    if(result == new_result){
+        std::ofstream ofile(&quot;results.csv&quot;);ofile.open();
+        for(int i = 0;i&lt;n_repititions;++i){
+            ofile &lt;&lt; i &lt;&lt; &quot;,production,&quot; &lt;&lt; prod_timings[i].count() &lt;&lt; &quot;,seconds&quot; &lt;&lt; std::endl;
+        }
+        //same with new_idea
+        ofile.close()
+    }
+    else
+        std::cout &lt;&lt; &quot;Never mind!&quot; &lt;&lt; std::endl;
+}</code></pre>
+</section><section id="why" class="slide level2">
+<h1>Why?</h1>
 </section></section>
       </div>
     </div>

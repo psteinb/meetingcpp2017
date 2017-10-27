@@ -864,3 +864,148 @@ Stream Benchmark as Reference
 # Benchmarks and how to create them
 
 ## chrono is your friend
+
+```
+#include <chrono>
+#include <iostream>
+#include "production_code.hpp"
+#include "new_ideas.hpp"
+
+int main(int argc, char** argv){
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto result = production_code::algorithm();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    auto new_result = new_ideas::algorithm();
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_i = (end - start);
+
+    std::cout << "we achieved a speed-up of " << t_p.count()/t_i.count() 
+              << std::endl;
+}
+```
+
+## ... check for correctness
+
+```
+#include <chrono>
+#include <iostream>
+#include "production_code.hpp"
+#include "new_ideas.hpp"
+
+int main(int argc, char** argv){
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto result = production_code::algorithm();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    auto new_result = new_ideas::algorithm();
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_i = (end - start);
+
+    if(result == new_result)
+        std::cout << "we achieved a speed-up of " << t_p.count()/t_i.count() 
+                  << std::endl;
+    else
+        std::cout << "Never mind!" << std::endl;
+}
+```
+
+## noisy lab under your fingers
+
+```
+#include <chrono>
+#include <iostream>
+#include "production_code.hpp"
+#include "new_ideas.hpp"
+
+int main(int argc, char** argv){
+
+    auto result = 0;
+    auto new_result = 0;
+    
+    auto start = std::chrono::high_resolution_clock::now();
+
+    for(int i = 0;i<n_repititions;++i)
+        result = production_code::algorithm();
+   
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_p = (end - start);
+    
+    start = std::chrono::high_resolution_clock::now();
+    
+    for(int i = 0;i<n_repititions;++i)
+        new_result = new_ideas::algorithm();
+        
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> t_i = (end - start);
+
+    if(result == new_result)
+        std::cout << "we achieved a speed-up of " << t_p.count()/t_i.count() 
+                  << std::endl;
+    else
+        std::cout << "Never mind!" << std::endl;
+}
+```
+
+## Please take notes
+
+```
+#include <chrono>
+#include <iostream>
+#include <ifstream>
+#include "production_code.hpp"
+#include "new_ideas.hpp"
+
+using duration_t = std::chrono::duration<double>;
+
+int main(int argc, char** argv){
+    //..
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = start;
+    std::vector<duration_t> my_timings(n_repititions);
+
+    for(int i = 0;i<n_repititions;++i){
+        start = std::chrono::high_resolution_clock::now();
+        result = production_code::algorithm();
+        my_timings[i] = std::chrono::high_resolution_clock::now() - start;
+    }
+   
+    //same with new_idea
+
+    if(result == new_result){
+        std::ofstream ofile("results.csv");ofile.open();
+        for(int i = 0;i<n_repititions;++i){
+            ofile << i << ",production," << prod_timings[i].count() << ",seconds" << std::endl;
+        }
+        //same with new_idea
+        ofile.close()
+    }
+    else
+        std::cout << "Never mind!" << std::endl;
+}
+```
+
+## Why?
+
+## Can this be automated?
+
+## libbenchmark
+
+## libbenchmark: simple example
+
+## libbenchmark: advanced
+
+## Where to stop?
+
+## roofline
+
+# Summary
+
+
+# Backup
