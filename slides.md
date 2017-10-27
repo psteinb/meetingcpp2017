@@ -993,6 +993,10 @@ int main(int argc, char** argv){
 
 ## Why?
 
+## Life as a reviewer
+
+## State of the Union is poor
+
 ## Can this be automated?
 
 ## libbenchmark
