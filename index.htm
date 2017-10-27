@@ -313,8 +313,337 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 <li>tricky to recommend one only</li>
 <li>tricky to find cross platform one</li>
 <li>typical: develop/profile on one platform, choose deploy on all</li>
+<li>now: brief tour</li>
 </ul>
 </aside>
+</section><section id="textual-output-gprof" class="slide level2">
+<h1>Textual output, <code>gprof</code></h1>
+<pre><code>Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 26.71      1.02     1.02                             void my_axpy&lt;6u, vector&lt;float&gt;, vector&lt;float&gt;, vector&lt;float&gt; &gt;(vector&lt;float&gt;&amp;, vector&lt;float&gt; const&amp;, vector&lt;float&gt; const&amp;)
+ 26.71      2.05     1.02                             void my_axpy&lt;2u, vector&lt;float&gt;, vector&lt;float&gt;, vector&lt;float&gt; &gt;(vector&lt;float&gt;&amp;, vector&lt;float&gt; const&amp;, vector&lt;float&gt; const&amp;)
+ 23.83      2.96     0.91                             void my_axpy&lt;8u, vector&lt;float&gt;, vector&lt;float&gt;, vector&lt;float&gt; &gt;(vector&lt;float&gt;&amp;, vector&lt;float&gt; const&amp;, vector&lt;float&gt; const&amp;)
+ 23.04      3.84     0.88                             void my_axpy&lt;4u, vector&lt;float&gt;, vector&lt;float&gt;, vector&lt;float&gt; &gt;(vector&lt;float&gt;&amp;, vector&lt;float&gt; const&amp;, vector&lt;float&gt; const&amp;)
+  0.00      3.84     0.00        1     0.00     0.00  _GLOBAL__sub_I_main</code></pre>
+<p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
+</section><section id="simple-graphical-output-perftools" class="slide level2">
+<h1>Simple Graphical output, <code>perftools</code></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<p><!-- <object type="image/svg+xml" data="figure/profiling/perftools/pprof21143.0.svg" width="90%"> --> <!-- Your browser does not support SVG --> <!-- </object> --></p>
+<figure>
+<img src="figure/profiling/perftools/pprof21143.0.png" class="figure-img img-fluid" style="width:90.0%" />
+</figure>
+</div>
+</div>
+</div>
+<p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
+</section><section id="using-a-pseudo-vm-kcachegrindvalgrind" class="slide level2">
+<h1>Using a pseudo-VM, <code>kcachegrind/valgrind</code></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/kcachegrind-screenshot.png" class="figure-img img-fluid" style="width:80.0%" />
+</figure>
+</div>
+</div>
+</div>
+<p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
+<aside class="notes">
+<ul>
+<li>pseudo-vm is the only way to obtain a line profile in C++</li>
+</ul>
+</aside>
+</section><section id="using-flamegraphs-hotspot" class="slide level2">
+<h1>Using flamegraphs, <code>hotspot</code></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/hotspot.png" class="figure-img img-fluid" style="width:80.0%" />
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>thanks to KDAB</li>
+<li>well done tool with bright future</li>
+</ul>
+</aside>
+</section><section id="proprietary-tools" class="slide level2">
+<h1>Proprietary tools</h1>
+<p>... some nice images ...</p>
+<aside class="notes">
+<ul>
+<li>NEXT: hotspot found</li>
+</ul>
+</aside>
+</section><section id="found-a-hot-spot" class="slide level2" data-background-image="img/1024px_light-bulb-light-old.jpg" data-background-position="right">
+<h1>Found a hot spot!</h1>
+<aside class="notes">
+<ul>
+<li>search finished, critical function/class identified</li>
+<li>NOW: find out why it is slow?</li>
+</ul>
+</aside>
+</section><section id="danger-zone-of-mental-models" class="slide level2" data-background-image="img/slip-up-danger-careless-slippery.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
+<h1>Danger zone of mental models</h1>
+<aside class="notes">
+<ul>
+<li>mental models are often wrong or outdated</li>
+<li>with a colleaque or rubber duck, come up with falsifyable hypothesis!</li>
+</ul>
+</aside>
+</section><section id="inspect-assembly" class="slide level2">
+<h1>Inspect Assembly?</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/compiler_explorer.png" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>inspecting assembly tough!</li>
+<li>play with -O flags to get a feeling</li>
+<li>mental hardware model can still be wrong</li>
+<li>asm can only partially falsify hypothesis</li>
+</ul>
+</aside>
+</section><section id="perf-for-hardware-exploration" class="slide level2">
+<h1>perf for hardware exploration?</h1>
+<p> </p>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<pre><code>$ perf list
+
+List of pre-defined events (to be used in -e):
+
+  branch-instructions OR branches                    [Hardware event]
+  branch-misses                                      [Hardware event]
+  bus-cycles                                         [Hardware event]
+  cache-misses                                       [Hardware event]
+  cache-references                                   [Hardware event]
+  cpu-cycles OR cycles                               [Hardware event]
+  instructions                                       [Hardware event]
+  ref-cycles                                         [Hardware event]
+  stalled-cycles-frontend OR idle-cycles-frontend    [Hardware event]
+  #...
+  L1-dcache-load-misses                              [Hardware cache event]
+  L1-dcache-loads                                    [Hardware cache event]
+  L1-dcache-prefetch-misses                          [Hardware cache event]
+  L1-dcache-store-misses                             [Hardware cache event]
+  L1-dcache-stores                                   [Hardware cache event]
+  L1-icache-load-misses                              [Hardware cache event]
+  #...</code></pre>
+</div>
+<div class="col-4">
+<ul>
+<li>perf event list depends on kernel version</li>
+<li>hardware counters are not portable (specification change by vendors)</li>
+<li>alternative: <a href="https://github.com/andikleen/pmu-tools">ocperf</a></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="test-hypothesis-with-likwid" class="slide level2">
+<h1>Test hypothesis with <a href="https://github.com/RRZE-HPC/likwid">likwid</a></h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/likwid-repo.png" alt="github.com/RRZE-HPC/likwid" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="https://github.com/RRZE-HPC/likwid">github.com/RRZE-HPC/likwid</a></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="container-fluid">
+<div class="row align-items-start">
+<div class="col">
+<ul>
+<li>open source Performance monitoring and benchmarking suite</li>
+<li>Linux only</li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>profiling through hardware counters (consistent meta markers for portability)</li>
+<li>exploration through monitoring</li>
+<li>marker API for C, C++, java and python</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="use-case-index-lists" class="slide level2">
+<h1>use case: Index Lists</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<pre><code>#include &lt;vector&gt;
+#include &quot;omp.h&quot;
+
+struct item 
+{
+    std::vector&lt;float&gt; position, momentum;
+    std::vector&lt;int&gt;   nearest_neighbors;
+}
+
+int main(int argc, char** argv){
+
+    std::vector&lt;item&gt; world = generate(argc*10e6);
+    
+    for(int&amp; time_step : timelapse){
+        
+        update(world);
+        
+        #pragma omp parallel for
+        for(item&amp; it : world){
+            
+            for(int&amp; index : it.nearest_neighbors){
+            
+                auto distance = calculate(it, world[index]);
+                if(distance &gt; threshold)
+                    it.nearest_neighbors.remove(index);
+                
+            }
+        }
+    }
+    //store results
+}</code></pre>
+</div>
+<div class="col">
+<ul>
+<li>code has a lot of problems related to memory layout</li>
+<li>index of nearest neighbor <code>item</code> stored in vector</li>
+<li><p><strong>hypotheses</strong>:</p>
+<ul>
+<li><p>large 'unpredictable' jumps in memory access deminishes cache bandwidth</p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/False_sharing">false sharing</a> forces cache line reloads as read-only and writable items may share the same cache line</p></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<p>Let's measure!</p>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>only show measurement for false sharing for brevity</li>
+</ul>
+</aside>
+</div>
+</section><section id="use-case-through-likwid" class="slide level2">
+<h1>use case: Through Likwid</h1>
+<div class="container-fluid">
+<div class="row align-items-start">
+<div class="col-6">
+<p>Use Case</p>
+<pre><code># export OMP_NUM_THREADS=1
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
+-m0 -C0 ./my_app
++----------------------------------|--------------+
+|              Metric              |    Core 0    |
++----------------------------------|--------------+
+|        Runtime (RDTSC) [s]       |      11.2125 |
+|       Runtime unhalted [s]       |      17.7696 |
+|            Clock [MHz]           |    3536.3990 |
+|                CPI               |       0.4700 |
+|  Local LLC false sharing [MByte] |       0.0008 |
+|   Local LLC false sharing rate   | 5.608215e-10 |
+| Remote LLC false sharing [MByte] |       0.0001 |
+|   Remote LLC false sharing rate  | 8.628023e-11 |
++----------------------------------|--------------+
+
+# export OMP_NUM_THREADS=4
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
+-m0 -C0-3 ./my_app
++---------------------------------------|--------------|
+|                 Metric                |      Sum     |
++---------------------------------------|--------------|
+|        Runtime (RDTSC) [s] STAT       |      32.5048 |
+|       Runtime unhalted [s] STAT       |      31.8024 |
+|            Clock [MHz] STAT           |    9484.2143 |
+|                CPI STAT               |       3.2922 |
+|  Local LLC false sharing [MByte] STAT |    2973.7637 |
+|   Local LLC false sharing rate STAT   |       0.0081 |
+| Remote LLC false sharing [MByte] STAT |       0.0007 |
+|   Remote LLC false sharing rate STAT  | 1.781667e-09 |
++---------------------------------------|--------------|</code></pre>
+</div>
+<div class="col-6">
+<p>Stream Benchmark as Reference</p>
+<pre><code># export OMP_NUM_THREADS=1
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
+-m0 -C0 ./stream
++----------------------------------|--------------+
+|              Metric              |    Core 0    |
++----------------------------------|--------------+
+|        Runtime (RDTSC) [s]       |      15.3517 |
+|       Runtime unhalted [s]       |      24.1526 |
+|            Clock [MHz]           |    3580.4732 |
+|                CPI               |       1.0501 |
+|  Local LLC false sharing [MByte] |       0.0006 |
+|   Local LLC false sharing rate   | 6.057282e-10 |
+| Remote LLC false sharing [MByte] |       0.0006 |
+|   Remote LLC false sharing rate  | 6.057282e-10 |
++----------------------------------|--------------+
+
+# export OMP_NUM_THREADS=4
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
+-m0 -C0-3 ./stream
++---------------------------------------|--------------|
+|                 Metric                |      Sum     |
++---------------------------------------|--------------|
+|        Runtime (RDTSC) [s] STAT       |      19.1140 |
+|       Runtime unhalted [s] STAT       |      25.9206 |
+|            Clock [MHz] STAT           |   12688.3579 |
+|                CPI STAT               |       4.5057 |
+|  Local LLC false sharing [MByte] STAT |       0.1067 |
+|   Local LLC false sharing rate STAT   | 4.080027e-07 |
+| Remote LLC false sharing [MByte] STAT |       0.0012 |
+|   Remote LLC false sharing rate STAT  | 4.438572e-09 |
++---------------------------------------|--------------|</code></pre>
+</div>
+</div>
+</div>
+</section><section id="bottom-line" class="slide level2">
+<h1>Bottom Line</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<ul>
+<li>excellent tools available to find hot spots</li>
+<li>once found, talk to someone<br />
+(rubber duck or colleaque(s))</li>
+<li>create falsifyable hypothesis</li>
+<li>MEASURE!</li>
+</ul>
+</div>
+<div class="col">
+<figure>
+<img src="img/rubber_duck_with_glasses.jpg" alt="&quot;Rubber Duckie, You&#39;re the One&quot;, by Daniel Rothamel, CC-BY 2.0" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="https://www.flickr.com/photos/realestatezebra/2608418319">&quot;Rubber Duckie, You're the One&quot;, by Daniel Rothamel, CC-BY 2.0</a></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>NEXT: let's find alternative code paths (algorithms/technology)</li>
+</ul>
+</aside>
+</section></section>
+<section><section id="benchmarks-and-how-to-create-them" class="titleslide slide level1"><h1>Benchmarks and how to create them</h1></section><section id="chrono-is-your-friend" class="slide level2">
+<h1>chrono is your friend</h1>
 </section></section>
       </div>
     </div>

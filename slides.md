@@ -404,3 +404,463 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 
 :]
 
+## Textual output, `gprof`
+
+```
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls  Ts/call  Ts/call  name    
+ 26.71      1.02     1.02                             void my_axpy<6u, vector<float>, vector<float>, vector<float> >(vector<float>&, vector<float> const&, vector<float> const&)
+ 26.71      2.05     1.02                             void my_axpy<2u, vector<float>, vector<float>, vector<float> >(vector<float>&, vector<float> const&, vector<float> const&)
+ 23.83      2.96     0.91                             void my_axpy<8u, vector<float>, vector<float>, vector<float> >(vector<float>&, vector<float> const&, vector<float> const&)
+ 23.04      3.84     0.88                             void my_axpy<4u, vector<float>, vector<float>, vector<float> >(vector<float>&, vector<float> const&, vector<float> const&)
+  0.00      3.84     0.00        1     0.00     0.00  _GLOBAL__sub_I_main
+```
+
+Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
+
+
+## Simple Graphical output, `perftools`
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  <!-- <object type="image/svg+xml" data="figure/profiling/perftools/pprof21143.0.svg" width="90%"> -->
+  <!-- Your browser does not support SVG -->
+  <!-- </object> -->
+  
+  ![](figure/profiling/perftools/pprof21143.0.png){ class="figure-img img-fluid" width="90%" }  
+  
+  .]
+
+.]
+
+.]
+
+Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
+
+
+## Using a pseudo-VM, `kcachegrind/valgrind`
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  ![](img/kcachegrind-screenshot.png){ class="figure-img img-fluid" width="80%" }  
+  
+  .]
+
+.]
+
+.]
+
+Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
+
+
+:notes[
+
+- pseudo-vm is the only way to obtain a line profile in C++
+
+:]
+
+
+## Using flamegraphs, `hotspot`
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  ![](img/hotspot.png){ class="figure-img img-fluid" width="80%" }  
+  
+  .]
+
+.]
+
+.]
+
+
+:notes[
+
+- thanks to KDAB
+- well done tool with bright future
+
+:]
+
+
+## Proprietary tools
+
+... some nice images ...
+
+
+:notes[
+
+- NEXT: hotspot found
+
+:]
+
+
+## Found a hot spot! { data-background-image="img/1024px_light-bulb-light-old.jpg" data-background-position="right" }
+
+
+:notes[
+
+- search finished, critical function/class identified
+- NOW: find out why it is slow?
+
+:]
+
+
+## Danger zone of mental models { data-background-image="img/slip-up-danger-careless-slippery.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
+
+:notes[
+
+- mental models are often wrong or outdated
+- with a colleaque or rubber duck, come up with falsifyable hypothesis!
+
+:]
+
+
+## Inspect Assembly?
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  ![](img/compiler_explorer.png){ class="figure-img img-fluid" width="100%" }  
+  
+  .]
+
+.]
+
+.]
+
+
+:notes[
+
+- inspecting assembly tough!
+- play with -O flags to get a feeling
+- mental hardware model can still be wrong
+- asm can only partially falsify hypothesis
+
+:]
+
+
+## perf for hardware exploration?
+
+
+&nbsp;
+
+
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+```
+$ perf list
+
+List of pre-defined events (to be used in -e):
+
+  branch-instructions OR branches                    [Hardware event]
+  branch-misses                                      [Hardware event]
+  bus-cycles                                         [Hardware event]
+  cache-misses                                       [Hardware event]
+  cache-references                                   [Hardware event]
+  cpu-cycles OR cycles                               [Hardware event]
+  instructions                                       [Hardware event]
+  ref-cycles                                         [Hardware event]
+  stalled-cycles-frontend OR idle-cycles-frontend    [Hardware event]
+  #...
+  L1-dcache-load-misses                              [Hardware cache event]
+  L1-dcache-loads                                    [Hardware cache event]
+  L1-dcache-prefetch-misses                          [Hardware cache event]
+  L1-dcache-store-misses                             [Hardware cache event]
+  L1-dcache-stores                                   [Hardware cache event]
+  L1-icache-load-misses                              [Hardware cache event]
+  #...
+```
+
+.]
+
+.col-4[
+
+
+- perf event list depends on kernel version
+- hardware counters are not portable (specification change by vendors)
+- alternative: [ocperf](https://github.com/andikleen/pmu-tools)
+
+
+.]
+
+.]
+
+.]
+
+
+
+
+
+## Test hypothesis with [likwid](https://github.com/RRZE-HPC/likwid)
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  ![[github.com/RRZE-HPC/likwid](https://github.com/RRZE-HPC/likwid)](img/likwid-repo.png){ class="figure-img img-fluid" width="100%" }
+  
+  .]
+
+.]
+
+.]
+
+.container-fluid[
+
+.row align-items-start[
+
+.col[
+
+- open source Performance monitoring and benchmarking suite
+- Linux only
+
+.]
+
+.col[
+
+- profiling through hardware counters (consistent meta markers for portability)
+- exploration through monitoring
+- marker API for C, C++, java and python
+
+.]
+
+.]
+
+.]
+
+
+## use case: Index Lists
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+
+```
+#include <vector>
+#include "omp.h"
+
+struct item 
+{
+    std::vector<float> position, momentum;
+    std::vector<int>   nearest_neighbors;
+}
+
+int main(int argc, char** argv){
+
+    std::vector<item> world = generate(argc*10e6);
+    
+    for(int& time_step : timelapse){
+        
+        update(world);
+        
+        #pragma omp parallel for
+        for(item& it : world){
+            
+            for(int& index : it.nearest_neighbors){
+            
+                auto distance = calculate(it, world[index]);
+                if(distance > threshold)
+                    it.nearest_neighbors.remove(index);
+                
+            }
+        }
+    }
+    //store results
+}
+```
+
+.]
+
+.col[
+
+- code has a lot of problems related to memory layout
+- index of nearest neighbor `item` stored in vector
+- **hypotheses**:  
+
+    + large 'unpredictable' jumps in memory access deminishes cache bandwidth
+    
+    + [false sharing](https://en.wikipedia.org/wiki/False_sharing) forces cache line reloads as read-only and writable items may share the same cache line
+
+. . . 
+
+
+Let's measure!
+
+
+.]
+
+.]
+
+.]
+
+
+:notes[
+
+- only show measurement for false sharing for brevity
+
+:]
+
+## use case: Through Likwid
+
+.container-fluid[
+
+.row align-items-start[
+
+.col-6[
+
+Use Case
+
+```
+# export OMP_NUM_THREADS=1
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
+-m0 -C0 ./my_app
++----------------------------------|--------------+
+|              Metric              |    Core 0    |
++----------------------------------|--------------+
+|        Runtime (RDTSC) [s]       |      11.2125 |
+|       Runtime unhalted [s]       |      17.7696 |
+|            Clock [MHz]           |    3536.3990 |
+|                CPI               |       0.4700 |
+|  Local LLC false sharing [MByte] |       0.0008 |
+|   Local LLC false sharing rate   | 5.608215e-10 |
+| Remote LLC false sharing [MByte] |       0.0001 |
+|   Remote LLC false sharing rate  | 8.628023e-11 |
++----------------------------------|--------------+
+
+# export OMP_NUM_THREADS=4
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
+-m0 -C0-3 ./my_app
++---------------------------------------|--------------|
+|                 Metric                |      Sum     |
++---------------------------------------|--------------|
+|        Runtime (RDTSC) [s] STAT       |      32.5048 |
+|       Runtime unhalted [s] STAT       |      31.8024 |
+|            Clock [MHz] STAT           |    9484.2143 |
+|                CPI STAT               |       3.2922 |
+|  Local LLC false sharing [MByte] STAT |    2973.7637 |
+|   Local LLC false sharing rate STAT   |       0.0081 |
+| Remote LLC false sharing [MByte] STAT |       0.0007 |
+|   Remote LLC false sharing rate STAT  | 1.781667e-09 |
++---------------------------------------|--------------|
+```
+
+.]
+
+
+
+.col-6[
+
+Stream Benchmark as Reference
+
+```
+# export OMP_NUM_THREADS=1
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
+-m0 -C0 ./stream
++----------------------------------|--------------+
+|              Metric              |    Core 0    |
++----------------------------------|--------------+
+|        Runtime (RDTSC) [s]       |      15.3517 |
+|       Runtime unhalted [s]       |      24.1526 |
+|            Clock [MHz]           |    3580.4732 |
+|                CPI               |       1.0501 |
+|  Local LLC false sharing [MByte] |       0.0006 |
+|   Local LLC false sharing rate   | 6.057282e-10 |
+| Remote LLC false sharing [MByte] |       0.0006 |
+|   Remote LLC false sharing rate  | 6.057282e-10 |
++----------------------------------|--------------+
+
+# export OMP_NUM_THREADS=4
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
+-m0 -C0-3 ./stream
++---------------------------------------|--------------|
+|                 Metric                |      Sum     |
++---------------------------------------|--------------|
+|        Runtime (RDTSC) [s] STAT       |      19.1140 |
+|       Runtime unhalted [s] STAT       |      25.9206 |
+|            Clock [MHz] STAT           |   12688.3579 |
+|                CPI STAT               |       4.5057 |
+|  Local LLC false sharing [MByte] STAT |       0.1067 |
+|   Local LLC false sharing rate STAT   | 4.080027e-07 |
+| Remote LLC false sharing [MByte] STAT |       0.0012 |
+|   Remote LLC false sharing rate STAT  | 4.438572e-09 |
++---------------------------------------|--------------|
+```
+
+.]
+
+.]
+
+.]
+
+
+
+
+
+## Bottom Line
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+- excellent tools available to find hot spots
+- once found, talk to someone  
+(rubber duck or colleaque(s))
+- create falsifyable hypothesis
+- MEASURE!
+
+
+.]
+
+
+
+.col[
+
+![["Rubber Duckie, You're the One", by Daniel Rothamel, CC-BY 2.0](https://www.flickr.com/photos/realestatezebra/2608418319)](img/rubber_duck_with_glasses.jpg){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.]
+
+.]
+
+
+
+:notes[
+
+- NEXT: let's find alternative code paths (algorithms/technology)
+
+:]
+
+
+# Benchmarks and how to create them
+
+## chrono is your friend
