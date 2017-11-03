@@ -243,8 +243,10 @@ template <typename Matrix>
 void bench(const Matrix& A, const Matrix& B, Matrix& C, const unsigned rep)
 {
     TP t1= steady_clock::now();
+    asm("#bench loop start");
     for (unsigned j= 0; j < rep; j++)
-    mult(A, B, C);
+      mult(A, B, C);
+    asm("#bench loop end");
     TP t2= steady_clock::now();
     double t= duration_s(t1, t2, rep);
     unsigned s= A.num_rows();
@@ -259,8 +261,10 @@ template <unsigned Size0, unsigned Size1, typename Matrix>
 void bench_unroll(const Matrix& A, const Matrix& B, Matrix& C, const unsigned rep)
 {
     TP t1= steady_clock::now();
+    asm("#bench_unroll loop start");
     for (unsigned j= 0; j < rep; j++)
-    mult<Size0, Size1>(A, B, C);
+      mult<Size0, Size1>(A, B, C);
+    asm("#bench_unroll loop stop");
     TP t2= steady_clock::now();
     double t= duration_s(t1, t2, rep);
     unsigned s= A.num_rows();
@@ -374,6 +378,12 @@ int main(int argc, char** argv)
             break;
         case 801:
             bench_unroll<8, 1>(A, B, C, rep);
+            break;
+        case 804:
+            bench_unroll<8, 4>(A, B, C, rep);
+            break;
+        case 808:
+            bench_unroll<8, 8>(A, B, C, rep);
             break;
         case 1601:
             bench_unroll<16, 1>(A, B, C, rep);

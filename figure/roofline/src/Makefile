@@ -14,3 +14,6 @@ all: $(TARGETS)
 
 matrix_unroll_example_markerapi : matrix_unroll_example_markerapi.cpp
 	$(CXX) $< -std=c++11 $(CXXFLAGS) $(LDFLAGS) -DLIKWID_PERFMON -I$(LIKWID_ROOT)/include -L$(LIKWID_ROOT)/lib -o $@ -llikwid
+
+%.s: %.cpp
+	$(CXX) -std=c++11 $(CXXFLAGS) -S -fverbose-asm $(LDFLAGS) $< 
