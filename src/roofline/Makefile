@@ -1,5 +1,5 @@
 
-TARGETS=matrix_unroll_example
+TARGETS=matrix_unroll_example vector_unroll_example2
 
 LIKWID_ROOT?=${HOME}/software/likwid/4.2.1/
 
