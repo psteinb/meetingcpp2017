@@ -194,7 +194,7 @@ void bench_unroll(Vector& u, const Vector& v, const Vector& w, const unsigned re
     auto start = std::chrono::steady_clock::now();
     asm("#bench_unroll start");
     for (unsigned j= 0; j < rep; j++)
-        unroll<BSize>(u)= v + v + w;
+        unroll<BSize>(u)= v + w/*+v*/;
     asm("#bench_unroll end");
     auto end = std::chrono::steady_clock::now();
 
@@ -208,13 +208,13 @@ int main(int argc, char** argv)
 {
     const unsigned s= 1 << 20;
     // if (argc > 1) s= atoi(argv[1]);
-    vector<float> u(s), v(s), w(s);
+    vector<double> u(s), v(s), w(s);
 
     for (unsigned i= 0; i < s; i++) { 
-        v[i]= float(i);
-        w[i]= float(2*i + 15);
+        v[i]= double(i);
+        w[i]= double(2*i + 15);
     }
-    const unsigned rep= 100;
+    const unsigned rep= 1000;
 
     if(argc == 1){
         auto start = std::chrono::steady_clock::now();
