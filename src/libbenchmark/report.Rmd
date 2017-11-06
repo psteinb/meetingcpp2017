@@ -1,0 +1,58 @@
+---
+title: "comparing loop styles for reductions in C++"
+output: html_document
+---
+
+## Problem description
+
+I am trying to reproduce Matt Godbolt's example from his [CppCon2017 talk](https://www.youtube.com/watch?v=bSkpMdDe4g4&list=PLHTh1InhhwT6bwIpRk0ZbCA0N2p1taxd6&index=5)
+
+
+## Experiments 
+
+Compile the source code in this directory as by typing:
+```
+$ make build
+```
+if you want to play with compiler flags, use
+```
+$ CXXFLAGS="-O2" make build
+```
+
+To run the benchmarks used in the plots below, do 
+```
+$ make run
+```
+or 
+
+```
+$./forloop_style_with_args_templated --benchmark_filter=.*/134217728 --benchmark_repetitions=20 --benchmark_out_format=csv --benchmark_out=loops_compared.csv
+```
+
+### Results
+
+Let's look at float32 first:
+
+```{r load_data, echo=FALSE}
+library(dplyr, warn.conflicts=FALSE)
+library(readr)
+library(ggplot2)
+
+benchdata = read_csv("loops_compared.csv", skip_lines=3) %>% filter(!(name != "mean" || name != "stddev"))
+head(benchdata)
+
+```
+
+<!-- ```{r comparison_plot, echo=FALSE, fig.width = 12} -->
+
+<!-- triad_plot = ggplot(triad_df,aes(array_size,mn,color=api)) + theme_bw() -->
+<!-- triad_plot = triad_plot + geom_line() + facet_wrap(~ rocm_version) -->
+<!-- triad_plot = triad_plot + geom_point(size=3) -->
+<!-- triad_plot = triad_plot + geom_errorbar(aes(ymin = mn-sd, ymax = mn+sd), width = 0.1) -->
+<!-- triad_plot = triad_plot + ggtitle("AMD Fiji R9 Nano, BabelStream Triad (c[:] = a[:] + d*b[:])")  -->
+<!-- triad_plot = triad_plot + xlab("array size (float32)") + ylab("triad bandwidth / [GB/s]") -->
+<!-- triad_plot = triad_plot + ylim(0,500) -->
+<!-- triad_plot = triad_plot + scale_x_continuous(trans=log2_trans(), breaks = trans_breaks("log2", function(x) 2^x),  labels = trans_format("log2", math_format(2^.x))) -->
+
+<!-- triad_plot -->
+<!-- ``` -->
