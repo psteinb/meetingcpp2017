@@ -176,7 +176,14 @@ John
 
 
 
-## Challenge: Find the cause of the performance regression without looking at the code {  data-background-image="img/binary-958952_1920_greybackground.jpg" }
+## Challenge: Finding the performance regression without looking at the code {  data-background-image="img/traffic_jam_800px.png" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
+
+:notes[
+
+- find the street with the traffic jam
+- experience guided
+
+:]
 
 
 
@@ -227,7 +234,7 @@ $ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
 
 :notes[
 
-- to search for the bottleneck, know your performance
+- to search for the bottleneck, know your performance without it
 
 ]
 
@@ -261,7 +268,6 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
              --19.77%--0
                        _int_realloc
                        page_fault
-
 ```
 
   .]
@@ -390,7 +396,7 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 :]
 
 
-# Performance Inside-Out {  data-background-image="img/Spirit_of_St._Louis_Jacksonville_Florida_wikicommons.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
+# Performance Inside-Out {  data-background-image="img/cable_chaos.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
 
 
 ## High Diversity of Tools! { data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"}
@@ -918,6 +924,7 @@ int main(int argc, char** argv){
 
 ## noisy lab under your fingers
 
+
 ```
 #include <chrono>
 #include <iostream>
@@ -993,19 +1000,192 @@ int main(int argc, char** argv){
 
 ## Why?
 
+> ... It's a simple Python interface around a blazing fast C++ library ...
+
+[from github.com/vincentlaucsb/csvmorph](https://github.com/vincentlaucsb/csvmorph)
+
+&nbsp;
+
+> ... However C++ code used to be significantly faster for a long time, and also today still is in many cases.
+
+[from SO "How much faster is C++ than C#?"](https://stackoverflow.com/a/138406)
+
+**[see more for youself!](http://lmgtfy.com/?q=C%2B%2B+faster)**
+
+:notes[
+
+- people expect C++ to be faster!!
+
+:]
+
 ## Life as a reviewer
 
-## State of the Union is poor
 
-## Can this be automated?
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![](img/hoefler_scientific_benchmarking_table1.png){ class="figure-img img-fluid" width="100%" }
+
+T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015
+
+
+.]
+
+.]
+
+.]
+
+
+
+:notes[
+
+- reviewer for conference proceedings related to GPU programming
+- very often: results are not reproducible and not based on ensemble's mean+variance
+
+:]
+
+
+## Let's take a toy example
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![[quick-bench.com](http://quick-bench.com/suql1AKnQ9a5l7ijd6ehwz_iVFk)](img/quick_bench_example.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.]
+
+.]
+
+:notes[
+
+- great tool!!
+- use results with a grain of salt
+
+:]
+
+## ... what if
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![ensemble variances tell a story](figure/quick_bench_chart_errorbars.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.]
+
+.]
+
+
+:notes[
+
+- again: great tool!!
+
+:]
+
+
+## Standardized, easy-to-parse output!
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![](img/hoefler_scientific_benchmarking_fig1.png){ class="figure-img img-fluid" width="70%" }
+
+T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015
+
+
+.]
+
+.]
+
+.]
+
+. . . 
+
+__Can this be automated? YES!__
+
+
+:notes[
+
+- statistics offer much more feature rich interpretation
+- allows reproducibility of results 
+- allows choice of tools for interpretation (Rmarkdown, jupyter notebooks, ...)
+- fight the in-silico crisis
+
+:]
+
 
 ## libbenchmark
 
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![[github.com/google/benchmark](https://github.com/google/benchmark)](img/libbenchmark_repo.png){ class="figure-img img-fluid" width="85%" }
+
+.]
+
+.]
+
+.]
+
+&nbsp;
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+- written in C++11/C++03
+- support of multi-threaded applications
+- powerful CLI
+
+.]
+
+.col[
+
+- easy setup of (templated) test cases
+- flexible argument control
+- custom counters/timers
+
+.]
+
+.]
+
+.]
+
+
 ## libbenchmark: simple example
+
+```
+
+```
 
 ## libbenchmark: advanced
 
+## libbenchmark et al
+
+
 ## Where to stop?
+
+
 
 ## roofline
 
@@ -1013,3 +1193,5 @@ int main(int argc, char** argv){
 
 
 # Backup
+
+## gearshifft

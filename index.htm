@@ -166,8 +166,14 @@ John</code></pre>
 <li>https://youtu.be/FnGCDLhaxKU?t=6152</li>
 </ul>
 </aside>
-</section><section id="challenge-find-the-cause-of-the-performance-regression-without-looking-at-the-code" class="slide level2" data-background-image="img/binary-958952_1920_greybackground.jpg">
-<h1>Challenge: Find the cause of the performance regression without looking at the code</h1>
+</section><section id="challenge-finding-the-performance-regression-without-looking-at-the-code" class="slide level2" data-background-image="img/traffic_jam_800px.png" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
+<h1>Challenge: Finding the performance regression without looking at the code</h1>
+<aside class="notes">
+<ul>
+<li>find the street with the traffic jam</li>
+<li>experience guided mostly</li>
+</ul>
+</aside>
 </section><section id="high-level-overview" class="slide level2">
 <h1>High Level Overview</h1>
 <div class="container-fluid">
@@ -306,7 +312,7 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 </ul>
 </aside>
 </section></section>
-<section><section id="performance-inside-out" class="titleslide slide level1" data-background-image="img/Spirit_of_St._Louis_Jacksonville_Florida_wikicommons.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"><h1>Performance Inside-Out</h1></section><section id="high-diversity-of-tools" class="slide level2" data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
+<section><section id="performance-inside-out" class="titleslide slide level1" data-background-image="img/cable_chaos.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"><h1>Performance Inside-Out</h1></section><section id="high-diversity-of-tools" class="slide level2" data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
 <h1>High Diversity of Tools!</h1>
 <aside class="notes">
 <ul>
@@ -760,6 +766,139 @@ int main(int argc, char** argv){
 }</code></pre>
 </section><section id="why" class="slide level2">
 <h1>Why?</h1>
+<blockquote>
+<p>... It's a simple Python interface around a blazing fast C++ library ...</p>
+</blockquote>
+<p><a href="https://github.com/vincentlaucsb/csvmorph">from github.com/vincentlaucsb/csvmorph</a></p>
+<p> </p>
+<blockquote>
+<p>... However C++ code used to be significantly faster for a long time, and also today still is in many cases.</p>
+</blockquote>
+<p><a href="https://stackoverflow.com/a/138406">from SO &quot;How much faster is C++ than C#?&quot;</a></p>
+<p><strong><a href="http://lmgtfy.com/?q=C%2B%2B+faster">see more for youself!</a></strong></p>
+<aside class="notes">
+<ul>
+<li>people expect C++ to be faster!!</li>
+</ul>
+</aside>
+</section><section id="life-as-a-reviewer" class="slide level2">
+<h1>Life as a reviewer</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/hoefler_scientific_benchmarking_table1.png" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015</p>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>reviewer for conference proceedings related to GPU programming</li>
+<li>very often: results are not reproducible and not based on ensemble's mean+variance</li>
+</ul>
+</aside>
+</section><section id="lets-take-a-toy-example" class="slide level2">
+<h1>Let's take a toy example</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/quick_bench_example.png" alt="quick-bench.com" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="http://quick-bench.com/suql1AKnQ9a5l7ijd6ehwz_iVFk">quick-bench.com</a></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>great tool!!</li>
+<li>use results with a grain of salt</li>
+</ul>
+</aside>
+</section><section id="what-if" class="slide level2">
+<h1>... what if</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="figure/quick_bench_chart_errorbars.png" alt="ensemble variances tell a story" class="figure-img img-fluid" style="width:100.0%" /><figcaption>ensemble variances tell a story</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>again: great tool!!</li>
+</ul>
+</aside>
+</section><section id="standardized-easy-to-parse-output" class="slide level2">
+<h1>Standardized, easy-to-parse output!</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/hoefler_scientific_benchmarking_fig1.png" class="figure-img img-fluid" style="width:70.0%" />
+</figure>
+<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015</p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><strong>Can this be automated? YES!</strong></p>
+<aside class="notes">
+<ul>
+<li>statistics offer much more feature rich interpretation</li>
+<li>allows reproducibility of results</li>
+<li>allows choice of tools for interpretation (Rmarkdown, jupyter notebooks, ...)</li>
+<li>fight the in-silico crisis</li>
+</ul>
+</aside>
+</div>
+</section><section id="libbenchmark" class="slide level2">
+<h1>libbenchmark</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/libbenchmark_repo.png" alt="github.com/google/benchmark" class="figure-img img-fluid" style="width:85.0%" /><figcaption><a href="https://github.com/google/benchmark">github.com/google/benchmark</a></figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p> </p>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<ul>
+<li>written in C++11/C++03</li>
+<li>support of multi-threaded applications</li>
+<li>powerful CLI</li>
+</ul>
+</div>
+<div class="col">
+<ul>
+<li>easy setup of (templated) test cases</li>
+<li>flexible argument control</li>
+<li>custom counters</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="libbenchmark-simple-example" class="slide level2">
+<h1>libbenchmark: simple example</h1>
+</section><section id="libbenchmark-advanced" class="slide level2">
+<h1>libbenchmark: advanced</h1>
+</section><section id="libbenchmark-et-al" class="slide level2">
+<h1>libbenchmark et al</h1>
+</section><section id="where-to-stop" class="slide level2">
+<h1>Where to stop?</h1>
+</section><section id="roofline" class="slide level2">
+<h1>roofline</h1>
+</section></section>
+<section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section></section>
+<section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="gearshifft" class="slide level2">
+<h1>gearshifft</h1>
 </section></section>
       </div>
     </div>
