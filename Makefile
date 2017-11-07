@@ -13,3 +13,7 @@ index.htm : slides.md
 
 clean :
 	rm -f links.md index.htm?
+
+present :
+	#use a local webserver to show the slides
+	npm start
