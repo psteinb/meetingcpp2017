@@ -510,11 +510,25 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 
 ## Proprietary tools
 
-... some nice images ...
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+  
+  ![](img/intel_advisor_2017.png){ class="figure-img img-fluid" width="80%" }  
+  
+  .]
+
+.]
+
+.]
 
 
 :notes[
 
+- excellent tool from the docs
+- would love to afford it
 - NEXT: hotspot found
 
 :]
