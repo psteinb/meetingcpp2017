@@ -46,7 +46,7 @@
 	    <br><br>
 	  </p>
 	  
-	  <h3 class="date">Nov 11, 2017, MeetingC++ 2017, Berlin</h3>
+	  <h3 class="date">Nov 10, 2017, MeetingC++ 2017, Berlin</h3>
 	</section>
 		
 	<section id="agenda" class="slide level2">
@@ -171,7 +171,7 @@ John</code></pre>
 <aside class="notes">
 <ul>
 <li>find the street with the traffic jam</li>
-<li>experience guided mostly</li>
+<li>experience guided</li>
 </ul>
 </aside>
 </section><section id="high-level-overview" class="slide level2">
@@ -206,7 +206,7 @@ $ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
 <p><code>dd</code>, <code>iperf</code>, <code>memhog</code>, ...</p>
 <aside class="notes">
 <ul>
-<li>to search for the bottleneck, know your performance</li>
+<li>to search for the bottleneck, know your performance without it</li>
 </ul>
 <p>]</p>
 </section><section id="profile-with-perf" class="slide level2">
@@ -232,8 +232,7 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
             |          
              --19.77%--0
                        _int_realloc
-                       page_fault
-</code></pre>
+                       page_fault</code></pre>
 </div>
 <div class="col-4">
 <ul>
@@ -648,7 +647,21 @@ int main(int argc, char** argv){
 </ul>
 </aside>
 </section></section>
-<section><section id="benchmarks-and-how-to-create-them" class="titleslide slide level1"><h1>Benchmarks and how to create them</h1></section><section id="chrono-is-your-friend" class="slide level2">
+<section><section id="benchmarks-and-how-to-create-them" class="titleslide slide level1" data-background-image="img/dark_Odysseus_Journey_500less_1200px.png" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;"><h1>Benchmarks and how to create them</h1></section><section id="faster-code" class="slide level2">
+<h1>faster code?</h1>
+<p><a href="https://youtu.be/FnGCDLhaxKU?t=6143">Chandler Carruth, Understanding Compiler Optimization, MeetingCPP 2015</a></p>
+<blockquote>
+<p>Klaus Iglberger: Guys that do know a lot about performance, do a lot of manual unrolling (manual vectorization). Apparently they don't trust the compiler too much. What is your take on this?</p>
+</blockquote>
+<blockquote>
+<p>Chandler: How do you define &quot;poeple who know a lot about performance&quot;? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop.</p>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>Chandler: They also have access to the compiler and they change it. A lot of the manual optimisation stems from having a compiler that you don't control. And this is why, I would encourage everyone in every organization to use an open-source compiler very near top-of-tree, so that when you want to change how the compiler works, you can actually go and write a patch for that compiler, get it submitted and then you have the compiler work in the way you want. it is the best way. Seize control of your fate. That is the beauty of open-source.</p>
+</blockquote>
+</div>
+</section><section id="chrono-is-your-friend" class="slide level2">
 <h1>chrono is your friend</h1>
 <pre><code>#include &lt;chrono&gt;
 #include &lt;iostream&gt;
@@ -789,7 +802,7 @@ int main(int argc, char** argv){
 <figure>
 <img src="img/hoefler_scientific_benchmarking_table1.png" class="figure-img img-fluid" style="width:100.0%" />
 </figure>
-<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015</p>
+<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, <br>SC '15 Proceedings, 2015</p>
 </div>
 </div>
 </div>
@@ -840,12 +853,13 @@ int main(int argc, char** argv){
 <figure>
 <img src="img/hoefler_scientific_benchmarking_fig1.png" class="figure-img img-fluid" style="width:70.0%" />
 </figure>
-<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015</p>
+<p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, <br>SC '15 Proceedings, 2015</p>
+</div>
+<div class="col-4">
+<p><strong>Can't this be automated?</strong></p>
 </div>
 </div>
 </div>
-<div class="fragment">
-<p><strong>Can this be automated? YES!</strong></p>
 <aside class="notes">
 <ul>
 <li>statistics offer much more feature rich interpretation</li>
@@ -854,7 +868,6 @@ int main(int argc, char** argv){
 <li>fight the in-silico crisis</li>
 </ul>
 </aside>
-</div>
 </section><section id="libbenchmark" class="slide level2">
 <h1>libbenchmark</h1>
 <div class="container-fluid">
@@ -880,21 +893,255 @@ int main(int argc, char** argv){
 <ul>
 <li>easy setup of (templated) test cases</li>
 <li>flexible argument control</li>
-<li>custom counters</li>
+<li>custom counters/timers</li>
 </ul>
 </div>
 </div>
 </div>
-</section><section id="libbenchmark-simple-example" class="slide level2">
-<h1>libbenchmark: simple example</h1>
+</section><section id="libbenchmark-in-action" class="slide level2">
+<h1>libbenchmark: in action</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/cppcon_godbolt_reduction.png" alt="Matt Godbolt at CppCon2017" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="https://www.youtube.com/watch?v=smqT9Io_bKo">Matt Godbolt at CppCon2017</a></figcaption>
+</figure>
+</div>
+<div class="col">
+<p><strong>Question:</strong></p>
+<blockquote>
+<p>Are range-based for loops faster than integer based ones depending on the data type used?</p>
+</blockquote>
+</div>
+</div>
+</div>
+</section><section id="libbenchmark-simple-approach" class="slide level2">
+<h1>libbenchmark: simple approach</h1>
+<div class="container-fluid">
+<div class="row align-items-start">
+<div class="col">
+<pre><code>#include &lt;benchmark/benchmark.h&gt;
+#include &lt;vector&gt;
+
+template &lt;typename T&gt;
+double sum(const T* _data, std::size_t _len){
+
+    double value = 0;
+    for(std::size_t i = 0;i&lt;_len;++i)
+        value += _data[i];
+
+    return value;
+}
+
+template &lt;typename container_type&gt;
+double sum(const container_type&amp; _data){
+
+    typedef typename container_type::value_type value_t;
+
+    double value = 0;
+    for(const value_t&amp; el : _data)
+        value += el;
+
+    return value;
+}</code></pre>
+</div>
+<div class="col">
+<pre><code>static void BM_integer_index(benchmark::State&amp; state) {
+
+    const std::size_t len = 1 &lt;&lt; 20;
+    std::vector&lt;int&gt; values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values.data(), len));
+    }
+}
+// Register the function as a benchmark
+BENCHMARK(BM_integer_index);
+
+static void BM_range_based(benchmark::State&amp; state) {
+
+    const std::size_t len = 1 &lt;&lt; 20;
+    std::vector&lt;int&gt; values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values));
+    }
+
+}
+BENCHMARK(BM_range_based);
+
+BENCHMARK_MAIN();</code></pre>
+</div>
+</div>
+</div>
 </section><section id="libbenchmark-advanced" class="slide level2">
 <h1>libbenchmark: advanced</h1>
-</section><section id="libbenchmark-et-al" class="slide level2">
-<h1>libbenchmark et al</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-7">
+<pre><code>template &lt;typename T&gt;
+static void BM_integer_index(benchmark::State&amp; state) {
+
+    const std::size_t len = state.range(0);
+    std::vector&lt;T&gt; values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values.data(), len));
+    }
+}
+
+BENCHMARK_TEMPLATE(BM_integer_index,int)
+-&gt;Arg(64)
+-&gt;Arg(512)
+-&gt;Arg(1 &lt;&lt; 10)
+-&gt;Arg(128&lt;&lt;10)
+-&gt;Arg(1&lt;&lt;20)
+-&gt;Arg(128&lt;&lt;20);
+BENCHMARK_TEMPLATE(BM_integer_index,float)
+-&gt;Arg(64)
+-&gt;Arg(512)
+-&gt;Arg(1 &lt;&lt; 10)
+-&gt;Arg(128&lt;&lt;10)
+-&gt;Arg(1&lt;&lt;20)
+-&gt;Arg(128&lt;&lt;20);
+
+BENCHMARK_MAIN();</code></pre>
+</div>
+<div class="col">
+<ul>
+<li><p>multiple arguments are also supported</p>
+<pre><code>BENCHMARK_TEMPLATE(BM_integer_index,int)
+//42 is the initial value of the reduced sum
+-&gt;Arg({64, 42})
+//..
+;</code></pre></li>
+<li>templated benchmark cases are supported</li>
+<li><p>workflow:</p></li>
+</ul>
+<div class="fragment">
+<ol type="1">
+<li>build benchmark <br> (different working set sizes, types)</li>
+<li>compile with varying flags</li>
+<li>run &amp; inspect</li>
+<li>render report with <a href="https://github.com/rstudio/rmarkdown">rmarkdown</a></li>
+</ol>
+</div>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>too bad: fixtures and templated benchmarks are lacking</li>
+</ul>
+</aside>
+</div>
+</section><section id="libbenchmark-reproduce-this" class="slide level2">
+<h1>libbenchmark: reproduce this!</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="src/libbenchmark/comparison.png" alt="gcc 6.4.1, libbbenchmark 1.3,  code available in this repo" class="figure-img img-fluid" style="width:100.0%" /><figcaption>gcc 6.4.1, libbbenchmark 1.3, <br><a href="src/libbenchmark/README.md">code available in this repo</a></figcaption>
+</figure>
+</div>
+<div class="col">
+<ul>
+<li>interesting: Matt Godbolt's claim appears to depent on the data type of the container float/int</li>
+<li>food for thought: compiler or stdlib implementation or ...</li>
+<li>file an <a href="https://github.com/psteinb/meetingcpp2017">issue</a> if you reproduced this!</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="there-is-more" class="slide level2">
+<h1>There is more</h1>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 8%" />
+<col style="width: 27%" />
+<col style="width: 39%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><a href="https://github.com/nickbruun/hayai">hayai</a></td>
+<td style="text-align: center;">229</td>
+<td>- based on googletest <br> - random order <br> - fixture support</td>
+<td style="text-align: left;">- no csv output <br> - online docs? <br> - commit activity? <br> - no donotoptimize</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><a href="https://github.com/DigitalInBlue/Celero">celero</a></td>
+<td style="text-align: center;">249</td>
+<td>- no dependencies <br> - baseline <br> - fixture support</td>
+<td style="text-align: left;">- no csv output</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><a href="https://nonius.io/">nonius</a></td>
+<td style="text-align: center;">49-194</td>
+<td>- header-only <br> - depends on boost <br> - super statistics summary</td>
+<td style="text-align: left;">- confusing repo structure <br> - buggy example(s) <br> - confidence intervals fixed to <br> normal distribution <br> - no donotoptimize</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><a href="https://github.com/google/benchmark">libbenchmark</a></td>
+<td style="text-align: center;">1985</td>
+<td>- no dependencies <br> - feature rich</td>
+<td style="text-align: left;">- templated versus fixture based setup</td>
+</tr>
+</tbody>
+</table>
 </section><section id="where-to-stop" class="slide level2">
 <h1>Where to stop?</h1>
+<ul>
+<li><strong>clearify upfront</strong></li>
+<li>where is your limit?
+<ul>
+<li>hardware</li>
+<li>APIs and libraries</li>
+<li>dependencies</li>
+<li>compiler</li>
+<li>OS</li>
+</ul></li>
+</ul>
 </section><section id="roofline" class="slide level2">
 <h1>roofline</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/roofline.png" alt="G. Ofenbeck, &quot;Applying the Roofline Model&quot;, ISPASS&#39;14 proceedings, 2014" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="http://www.spiral.net/software/roofline.html">G. Ofenbeck, &quot;Applying the Roofline Model&quot;, ISPASS'14 proceedings, 2014</a></figcaption>
+</figure>
+</div>
+<div class="col">
+<ul>
+<li>acknowledge boundaries of algorithm</li>
+<li>differentiate &quot;work&quot; versus &quot;traffic&quot;</li>
+<li>simplistic: bottleneck is either work or traffic</li>
+<li>cache effects problematic</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="roofline-in-action" class="slide level2">
+<h1>roofline in action</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/overview-mmm-illustrator.pdf.png" alt="G. Ofenbeck, &quot;Applying the Roofline Model&quot;, ISPASS&#39;14 proceedings, 2014" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="http://www.spiral.net/software/roofline.html">G. Ofenbeck, &quot;Applying the Roofline Model&quot;, ISPASS'14 proceedings, 2014</a></figcaption>
+</figure>
+</div>
+<div class="col">
+<ul>
+<li>clear indication where optimisations go</li>
+<li>can be used to give estimates on performance improvements (say on new hardware)</li>
+<li>typically used for floating-point heavy applications</li>
+<li>interesting mental model</li>
+</ul>
+</div>
+</div>
+</div>
 </section></section>
 <section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section></section>
 <section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="gearshifft" class="slide level2">

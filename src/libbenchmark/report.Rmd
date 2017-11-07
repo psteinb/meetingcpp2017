@@ -31,28 +31,43 @@ $./forloop_style_with_args_templated --benchmark_filter=.*/134217728 --benchmark
 
 ### Results
 
-Let's look at float32 first:
+The following R snippets assume that you have the complete `tidyverse` installed. In order to do this, used
+
+```
+$ R
+> install.packages("tidyverse")
+```
+
+So let's see what the data has to offer:
 
 ```{r load_data, echo=FALSE}
 library(dplyr, warn.conflicts=FALSE)
 library(readr)
+library(tidyr)
 library(ggplot2)
 
-benchdata = read_csv("loops_compared.csv", skip_lines=3) %>% filter(!(name != "mean" || name != "stddev"))
-head(benchdata)
+#loads the csv file
+benchdata = read_csv("loops_compared.csv", skip=3,col_types = cols()) %>% 
+#does some wrangling of the data to make it optimal for plotting
+filter(grepl('mean|stddev', name)) %>% 
+separate(name,c("name","n_items"),sep="/") %>% 
+separate(n_items,c("size","property"),sep="_",convert = TRUE) %>% 
+separate(name,c("benchmark","container_type"),sep="<") %>%
+mutate(container_type = as.factor(gsub('>', '', container_type)), property = as.factor(property)) %>%
+mutate(real_time_ms = real_time / 10e6) %>% select(benchmark, container_type, property,real_time_ms)
 
-```
+#rename the columns
+benchdata_wide = spread(benchdata, property, real_time_ms)
+names(benchdata_wide)[names(benchdata_wide)=="mean"] <- "mean_realtime_ms"
+names(benchdata_wide)[names(benchdata_wide)=="stddev"] <- "stddev_realtime_ms"
 
-<!-- ```{r comparison_plot, echo=FALSE, fig.width = 12} -->
+#do the plot
+compare_plot = ggplot(benchdata_wide,aes(benchmark,mean_realtime_ms,color=container_type)) + theme_bw()  
+compare_plot = compare_plot + geom_point(size=5,position = position_dodge(width=.5))  
+compare_plot = compare_plot + geom_errorbar(aes(ymin = mean_realtime_ms-stddev_realtime_ms, ymax = mean_realtime_ms+stddev_realtime_ms), width = 0.07,position = position_dodge(width=.5))  
+compare_plot = compare_plot + xlab("benchmark") + ylab("realtime / [ms]")  
 
-<!-- triad_plot = ggplot(triad_df,aes(array_size,mn,color=api)) + theme_bw() -->
-<!-- triad_plot = triad_plot + geom_line() + facet_wrap(~ rocm_version) -->
-<!-- triad_plot = triad_plot + geom_point(size=3) -->
-<!-- triad_plot = triad_plot + geom_errorbar(aes(ymin = mn-sd, ymax = mn+sd), width = 0.1) -->
-<!-- triad_plot = triad_plot + ggtitle("AMD Fiji R9 Nano, BabelStream Triad (c[:] = a[:] + d*b[:])")  -->
-<!-- triad_plot = triad_plot + xlab("array size (float32)") + ylab("triad bandwidth / [GB/s]") -->
-<!-- triad_plot = triad_plot + ylim(0,500) -->
-<!-- triad_plot = triad_plot + scale_x_continuous(trans=log2_trans(), breaks = trans_breaks("log2", function(x) 2^x),  labels = trans_format("log2", math_format(2^.x))) -->
+compare_plot  
+```  
 
-<!-- triad_plot -->
-<!-- ``` -->
+Looks like there is a tendency that integer based loops run faster on my laptop when accessing integer data! Interesting. Something worthwhile following up.

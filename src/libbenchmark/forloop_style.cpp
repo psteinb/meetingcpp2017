@@ -1,6 +1,5 @@
 #include <benchmark/benchmark.h>
 #include <vector>
-#include <iterator>
 
 template <typename T>
 double sum(const T* _data, std::size_t _len){

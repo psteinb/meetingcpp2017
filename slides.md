@@ -3,7 +3,7 @@ title: The Performance Addict's Toolbox
 author: Peter Steinbach
 origin: Scionics Computer Innovation GmbH
 email: steinbach@scionics.de
-date: Nov 11, 2017, MeetingC++ 2017, Berlin
+date: Nov 10, 2017, MeetingC++ 2017, Berlin
 ---
 
 
@@ -867,7 +867,20 @@ Stream Benchmark as Reference
 :]
 
 
-# Benchmarks and how to create them
+# Benchmarks and how to create them { data-background-image="img/dark_Odysseus_Journey_500less_1200px.png" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;" }
+
+## faster code?
+
+[Chandler Carruth, Understanding Compiler Optimization, MeetingCPP 2015](https://youtu.be/FnGCDLhaxKU?t=6143)
+
+> Klaus Iglberger: Guys that do know a lot about performance, do a lot of manual unrolling (manual vectorization). Apparently they don't trust the compiler too much. What is your take on this?
+
+> Chandler: How do you define "poeple who know a lot about performance"? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop. 
+
+. . . 
+
+> Chandler: They also have access to the compiler and they change it. A lot of the manual optimisation stems from having a compiler that you don't control. And this is why, I would encourage everyone in every organization to use an open-source compiler very near top-of-tree, so that when you want to change how the compiler works, you can actually go and write a patch for that compiler, get it submitted and then you have the compiler work in the way you want. it is the best way. Seize control of your fate. That is the beauty of open-source.
+
 
 ## chrono is your friend
 
@@ -1029,7 +1042,7 @@ int main(int argc, char** argv){
 
 ![](img/hoefler_scientific_benchmarking_table1.png){ class="figure-img img-fluid" width="100%" }
 
-T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015
+T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), <br>SC '15 Proceedings, 2015
 
 
 .]
@@ -1105,8 +1118,14 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 
 ![](img/hoefler_scientific_benchmarking_fig1.png){ class="figure-img img-fluid" width="70%" }
 
-T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), SC '15 Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis, 2015
+T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results"](https://dl.acm.org/citation.cfm?id=2807644), <br>SC '15 Proceedings, 2015
 
+
+.]
+
+.col-4[
+
+__Can't this be automated?__
 
 .]
 
@@ -1114,15 +1133,13 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 
 .]
 
-. . . 
 
-__Can this be automated? YES!__
 
 
 :notes[
 
 - statistics offer much more feature rich interpretation
-- allows reproducibility of results 
+- allows reproducibility of results
 - allows choice of tools for interpretation (Rmarkdown, jupyter notebooks, ...)
 - fight the in-silico crisis
 
@@ -1171,25 +1188,297 @@ __Can this be automated? YES!__
 
 .]
 
+## libbenchmark: in action
 
-## libbenchmark: simple example
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+![[Matt Godbolt at CppCon2017](https://www.youtube.com/watch?v=smqT9Io_bKo)](img/cppcon_godbolt_reduction.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.col[
+
+__Question:__
+
+> Are range-based for loops faster than integer based ones depending on the data type used?
+
+
+.]
+
+.]
+
+.]
+
+
+## libbenchmark: simple approach
+
+.container-fluid[
+
+.row align-items-start[
+
+.col[
 
 ```
+#include <benchmark/benchmark.h>
+#include <vector>
+
+template <typename T>
+double sum(const T* _data, std::size_t _len){
+
+    double value = 0;
+    for(std::size_t i = 0;i<_len;++i)
+        value += _data[i];
+
+    return value;
+}
+
+template <typename container_type>
+double sum(const container_type& _data){
+
+    typedef typename container_type::value_type value_t;
+
+    double value = 0;
+    for(const value_t& el : _data)
+        value += el;
+
+    return value;
+}
+```
+.]
+
+.col[
 
 ```
+static void BM_integer_index(benchmark::State& state) {
+
+    const std::size_t len = 1 << 20;
+    std::vector<int> values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values.data(), len));
+    }
+}
+// Register the function as a benchmark
+BENCHMARK(BM_integer_index);
+
+static void BM_range_based(benchmark::State& state) {
+
+    const std::size_t len = 1 << 20;
+    std::vector<int> values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values));
+    }
+
+}
+BENCHMARK(BM_range_based);
+
+BENCHMARK_MAIN();
+```
+
+.]
+
+.]
+
+.]
+
 
 ## libbenchmark: advanced
 
-## libbenchmark et al
+.container-fluid[
 
+.row align-items-center[
+
+.col-7[
+
+```
+template <typename T>
+static void BM_integer_index(benchmark::State& state) {
+
+    const std::size_t len = state.range(0);
+    std::vector<T> values(len,0.f);
+    double result = 0;
+
+    for (auto _ : state){
+        benchmark::DoNotOptimize(result = sum(values.data(), len));
+    }
+}
+
+BENCHMARK_TEMPLATE(BM_integer_index,int)
+->Arg(64)
+->Arg(512)
+->Arg(1 << 10)
+->Arg(128<<10)
+->Arg(1<<20)
+->Arg(128<<20);
+BENCHMARK_TEMPLATE(BM_integer_index,float)
+->Arg(64)
+->Arg(512)
+->Arg(1 << 10)
+->Arg(128<<10)
+->Arg(1<<20)
+->Arg(128<<20);
+
+BENCHMARK_MAIN();
+```
+.]
+
+.col[
+
+- multiple arguments are also supported
+```
+BENCHMARK_TEMPLATE(BM_integer_index,int)
+//42 is the initial value of the reduced sum
+->Arg({64, 42})
+//..
+;
+```
+- templated benchmark cases are supported
+- workflow:
+
+. . .
+
+1. build benchmark <br> (different working set sizes, types)
+2. compile with varying flags
+3. run & inspect
+5. render report with [rmarkdown](https://github.com/rstudio/rmarkdown)
+
+.]
+
+.]
+
+.]
+
+:notes[
+
+- too bad: fixtures and templated benchmarks are lacking
+
+:]
+
+## libbenchmark: reproduce this!
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![gcc 6.4.1, libbbenchmark 1.3, <br>[code available in this repo](src/libbenchmark/README.md)](src/libbenchmark/comparison.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.col[
+
+- interesting: Matt Godbolt's claim appears to depent on the data type of the container float/int 
+- food for thought: compiler or stdlib implementation or ...
+- file an [issue](https://github.com/psteinb/meetingcpp2017) if you reproduced this!
+
+.]
+
+.]
+
+.]
+
+
+## There is more
+
+------------------------- ------- -------------------------- ---------------------------------------
+ [hayai][haylink]          229    - based on googletest <br> - no csv output <br>                   
+                                  - random order <br>        - online docs? <br>
+                                  - fixture support          - commit activity? <br>
+                                                             - no donotoptimize
+                                                                                                                                 
+ [celero][cellink]         249    - no dependencies <br>     - no csv output
+                                  - baseline <br>
+                                  - fixture support
+                                         
+ [nonius][nonlink]         49-194 - header-only <br>         - confusing repo structure <br>
+                                  - depends on boost <br>    - buggy example(s) <br>
+                                  - super statistics summary - confidence intervals fixed to <br> 
+                                                               normal distribution <br>
+                                                             - no donotoptimize
+                                                                                          
+ [libbenchmark][benlink]   1985   - no dependencies <br>     - templated versus fixture based setup
+                                  - feature rich               
+                           
+------------------------- ------- -------------------------- ---------------------------------------
+
+
+[haylink]: https://github.com/nickbruun/hayai
+[cellink]: https://github.com/DigitalInBlue/Celero
+[nonlink]: https://nonius.io/
+[benlink]: https://github.com/google/benchmark
 
 ## Where to stop?
 
-
+- __clearify upfront__
+- where is your limit?
+    - hardware
+    - APIs and libraries
+    - dependencies
+    - compiler
+    - OS
 
 ## roofline
 
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+![[G. Ofenbeck, "Applying the Roofline Model", ISPASS'14 proceedings, 2014](http://www.spiral.net/software/roofline.html)](img/roofline.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.col[
+
+- acknowledge boundaries of algorithm
+- differentiate "work" versus "traffic"
+- simplistic: bottleneck is either work or traffic
+- cache effects problematic
+
+.]
+
+.]
+
+.]
+
+
+## roofline in action
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+![[G. Ofenbeck, "Applying the Roofline Model", ISPASS'14 proceedings, 2014](http://www.spiral.net/software/roofline.html)](img/overview-mmm-illustrator.pdf.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.col[
+
+- clear indication where optimisations go
+- can be used to give estimates on performance improvements (say on new hardware)
+- typically used for floating-point heavy applications
+- interesting mental model
+
+.]
+
+.]
+
+.]
+
 # Summary
+
+
 
 
 # Backup
