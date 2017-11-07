@@ -219,7 +219,7 @@ $ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
 2+0 records out
 2147483648 bytes (2.1 GB) copied, 2.94478 s, 729 MB/s
 
-$ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
+$ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 2+0 records in
 2+0 records out
 2147483648 bytes (2.1 GB) copied, 1.14782 s, 1.9 GB/s
@@ -229,12 +229,13 @@ $ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
 
 **What can your hardware typically do?**  
 
-`dd`, `iperf`, `memhog`, ...
+`dd`, [ior](http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/), `memhog`,  [stream](https://www.cs.virginia.edu/stream/), ...
 
 
 :notes[
 
 - to search for the bottleneck, know your performance without it
+- guesstimate the bottleneck, cross check expected performance with a benchmark
 
 ]
 
@@ -394,6 +395,11 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 - **so far**: didn't touch the source code or build it
 
 :]
+
+## Bottom Line { data-background-image="img/balloon.jpeg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"}
+
+Taking a balloon to get an overview of performance bottlenecks is possible.
+
 
 
 # Performance Inside-Out {  data-background-image="img/cable_chaos.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;" }
@@ -838,7 +844,7 @@ Stream Benchmark as Reference
 .col[
 
 - excellent tools available to find hot spots
-- once found, talk to someone  
+- once "found", talk to someone  
 (rubber duck or colleaque(s))
 - create falsifyable hypothesis
 - MEASURE!
@@ -876,10 +882,6 @@ Stream Benchmark as Reference
 > Klaus Iglberger: Guys that do know a lot about performance, do a lot of manual unrolling (manual vectorization). Apparently they don't trust the compiler too much. What is your take on this?
 
 > Chandler: How do you define "poeple who know a lot about performance"? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop. 
-
-. . . 
-
-> Chandler: They also have access to the compiler and they change it. A lot of the manual optimisation stems from having a compiler that you don't control. And this is why, I would encourage everyone in every organization to use an open-source compiler very near top-of-tree, so that when you want to change how the compiler works, you can actually go and write a patch for that compiler, get it submitted and then you have the compiler work in the way you want. it is the best way. Seize control of your fate. That is the beauty of open-source.
 
 
 ## chrono is your friend
@@ -1476,10 +1478,83 @@ BENCHMARK_TEMPLATE(BM_integer_index,int)
 
 .]
 
+
+## Bottom Line { data-background-image="img/pacman-games.jpg" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;" }
+
+- your requirements are your guiding light in the dungeon
+- reproducible ensemble based benchmarks are key
+
+
 # Summary
 
+## Take aways 
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-4[
+
+![](img/balloon.jpeg){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.col-4[
+
+![](img/rubber_duck_with_glasses.jpg){ class="figure-img img-fluid" width="100%" }
+
+.]
 
 
+.col-4[
+
+![](img/pacman-games.jpg){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.]
+
+.]
+
+.container-fluid[
+
+.row align-items-start[
+
+.col-4[
+
+__Take a balloon:__
+
+Use Tools to check the lay of the land.
+
+.]
+
+.col-4[
+
+__Falsify the rubber duck:__
+
+Profile and check your hypothesis. 
+
+.]
+
+
+.col-4[
+
+
+__Survive the dungeon__
+
+With automated ensemble based benchmarks.
+
+.]
+
+.]
+
+.]
+
+
+
+## Final Words
+
+C++ is a language considered "fast". We, the community, need to live up to this goal and have robust and reproducible numbers!
 
 # Backup
 

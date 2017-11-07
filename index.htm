@@ -197,16 +197,17 @@ John</code></pre>
 2+0 records out
 2147483648 bytes (2.1 GB) copied, 2.94478 s, 729 MB/s
 
-$ dd if=/dev/zero of=/dev/shm/steinbac.zeros bs=1G count=2
+$ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 2+0 records in
 2+0 records out
 2147483648 bytes (2.1 GB) copied, 1.14782 s, 1.9 GB/s</code></pre>
 <p> </p>
 <p><strong>What can your hardware typically do?</strong></p>
-<p><code>dd</code>, <code>iperf</code>, <code>memhog</code>, ...</p>
+<p><code>dd</code>, <a href="http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/">ior</a>, <code>memhog</code>, <a href="https://www.cs.virginia.edu/stream/">stream</a>, ...</p>
 <aside class="notes">
 <ul>
 <li>to search for the bottleneck, know your performance without it</li>
+<li>guesstimate the bottleneck, cross check expected performance with a benchmark</li>
 </ul>
 <p>]</p>
 </section><section id="profile-with-perf" class="slide level2">
@@ -310,6 +311,9 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 <li><p><strong>so far</strong>: didn't touch the source code or build it</p></li>
 </ul>
 </aside>
+</section><section id="bottom-line" class="slide level2" data-background-image="img/balloon.jpeg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
+<h1>Bottom Line</h1>
+<p>Taking a balloon to get an overview of performance bottlenecks is possible.</p>
 </section></section>
 <section><section id="performance-inside-out" class="titleslide slide level1" data-background-image="img/cable_chaos.jpg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"><h1>Performance Inside-Out</h1></section><section id="high-diversity-of-tools" class="slide level2" data-background-image="img/dreamstime-in-c++.jpg" data-background-position="right" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
 <h1>High Diversity of Tools!</h1>
@@ -621,14 +625,14 @@ int main(int argc, char** argv){
 </div>
 </div>
 </div>
-</section><section id="bottom-line" class="slide level2">
+</section><section id="bottom-line-1" class="slide level2">
 <h1>Bottom Line</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
 <ul>
 <li>excellent tools available to find hot spots</li>
-<li>once found, talk to someone<br />
+<li>once &quot;found&quot;, talk to someone<br />
 (rubber duck or colleaque(s))</li>
 <li>create falsifyable hypothesis</li>
 <li>MEASURE!</li>
@@ -656,11 +660,6 @@ int main(int argc, char** argv){
 <blockquote>
 <p>Chandler: How do you define &quot;poeple who know a lot about performance&quot;? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop.</p>
 </blockquote>
-<div class="fragment">
-<blockquote>
-<p>Chandler: They also have access to the compiler and they change it. A lot of the manual optimisation stems from having a compiler that you don't control. And this is why, I would encourage everyone in every organization to use an open-source compiler very near top-of-tree, so that when you want to change how the compiler works, you can actually go and write a patch for that compiler, get it submitted and then you have the compiler work in the way you want. it is the best way. Seize control of your fate. That is the beauty of open-source.</p>
-</blockquote>
-</div>
 </section><section id="chrono-is-your-friend" class="slide level2">
 <h1>chrono is your friend</h1>
 <pre><code>#include &lt;chrono&gt;
@@ -1142,8 +1141,54 @@ BENCHMARK_MAIN();</code></pre>
 </div>
 </div>
 </div>
+</section><section id="bottom-line-2" class="slide level2" data-background-image="img/pacman-games.jpg" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;">
+<h1>Bottom Line</h1>
+<ul>
+<li>your requirements are your guiding light in the dungeon</li>
+<li>reproducible ensemble based benchmarks are key</li>
+</ul>
 </section></section>
-<section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section></section>
+<section><section id="summary" class="titleslide slide level1"><h1>Summary</h1></section><section id="take-aways" class="slide level2">
+<h1>Take aways</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-4">
+<figure>
+<img src="img/balloon.jpeg" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+</div>
+<div class="col-4">
+<figure>
+<img src="img/rubber_duck_with_glasses.jpg" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+</div>
+<div class="col-4">
+<figure>
+<img src="img/pacman-games.jpg" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+</div>
+</div>
+</div>
+<div class="container-fluid">
+<div class="row align-items-start">
+<div class="col-4">
+<p><strong>Take a balloon:</strong></p>
+<p>Use Tools to check the lay of the land.</p>
+</div>
+<div class="col-4">
+<p><strong>Falsify the rubber duck:</strong></p>
+<p>Profile and check your hypothesis.</p>
+</div>
+<div class="col-4">
+<p><strong>Survive the dungeon</strong></p>
+<p>With automated ensemble based benchmarks.</p>
+</div>
+</div>
+</div>
+</section><section id="final-word" class="slide level2">
+<h1>Final Word</h1>
+<p>C++ is a language considered &quot;fast&quot;. We, the community, need to live up to this goal and have robust and reproducible numbers!</p>
+</section></section>
 <section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="gearshifft" class="slide level2">
 <h1>gearshifft</h1>
 </section></section>
