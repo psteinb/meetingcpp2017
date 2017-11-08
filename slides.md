@@ -213,7 +213,7 @@ John
 
 ## Reference Numbers
 
-```
+```{.bash }
 $ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
 2+0 records in
 2+0 records out

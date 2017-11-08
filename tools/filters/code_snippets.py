@@ -34,8 +34,6 @@ def convert_cb(k, v, f, m):
         rvalue += '\n'
         rvalue += "</code></pre>"
         return html(rvalue)
-    else:
-        return html(r"BOOOO "+k)
 
 if __name__ == "__main__":
     toJSONFilter(convert_cb)
