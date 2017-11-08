@@ -125,7 +125,7 @@ report bugs and questions there!
 
 ## One day as a Performance Engineer
 
-![Alan O'Rourke, [Too Busy To Improve - Performance Management - Square Wheels](https://www.flickr.com/photos/toddle_email_newsletters/15412982829/in/photostream/), CC](img/flickr_ORourke_2_busy_to_improve_1200px.png){ class="figure-img img-fluid" width="70%" }
+![Alan O'Rourke, [Too Busy To Improve - Performance Management - Square Wheels](https://www.flickr.com/photos/toddle_email_newsletters/15412982829/in/photostream/), CC](img/flickr_ORourke_2_busy_to_improve_framed.png){ class="figure-img img-fluid" width="70%" }
 
 :notes[
 
@@ -202,7 +202,7 @@ John
 
 .col[
 
-![Task Manager, [Image](https://en.wikipedia.org/wiki/File:Win7-tskman-perf.png) courtesy of Fergie4000, CC-BY 3.0](img/Win7-tskman-perf.png){ class="figure-img img-fluid" width="80%" }
+![](img/task_manager_small.png){ class="figure-img img-fluid" width="80%" }
 
 .]
 
