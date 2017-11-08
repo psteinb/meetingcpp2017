@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="$css$"/>
     $endfor$
     $else$
-    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+    <link rel="stylesheet" href="css/theme/black.css">
     $endif$
 
     $if(highlighting-css)$

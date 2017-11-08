@@ -10,15 +10,15 @@ date: Nov 10, 2017, MeetingC++ 2017, Berlin
 ## Agenda 
 
 
-1. `whoami` and Motivation
+1. Who-am-I and Motivation
 2. Performance outside-in
 3. Performance inside-out
 4. Benchmarks and how to create them
 
 
-# whoami and Motivation
+# Who-am-I and Motivation
 
-## `whoami`
+## Who am I?
 
 .container-fluid[
 
@@ -213,7 +213,7 @@ John
 
 ## Reference Numbers
 
-```{.bash }
+```
 $ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
 2+0 records in
 2+0 records out
@@ -229,7 +229,7 @@ $ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 
 **What can your hardware typically do?**  
 
-`dd`, [ior](http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/), `memhog`,  [stream](https://www.cs.virginia.edu/stream/), ...
+dd, [ior](http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/), memhog,  [stream](https://www.cs.virginia.edu/stream/), ...
 
 
 :notes[
@@ -465,7 +465,7 @@ Taking a balloon to get an overview of performance bottlenecks is possible.
 
 :]
 
-## Textual output, `gprof`
+## Textual output, gprof
 
 ```
 $ g++ -pg -O2 -std=c++11 vector_unroll_example.cpp
@@ -487,7 +487,7 @@ Each sample counts as 0.01 seconds.
 Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
 
 
-## Simple Graphical output, `perftools`
+## Simple Graphical output, perftools
 
 .container-fluid[
 
@@ -536,7 +536,7 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 :]
 
 
-## Using flamegraphs, `hotspot`
+## Using flamegraphs, hotspot
 
 .container-fluid[
 
@@ -821,8 +821,8 @@ numactl -m0 -C0 ./my_app
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
-# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
--m0 -C0-3 ./my_app
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE \
+numactl -m0 -C0-3 ./my_app
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
@@ -843,8 +843,8 @@ Stream Benchmark as Reference
 
 ```
 # export OMP_NUM_THREADS=1
-# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
--m0 -C0 ./stream
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE \
+numactl -m0 -C0 ./stream
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
@@ -855,8 +855,8 @@ Stream Benchmark as Reference
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
-# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
--m0 -C0-3 ./stream
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE \
+numactl -m0 -C0-3 ./stream
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     
     <link rel="stylesheet" href="css/reveal.css"/>
-        <link rel="stylesheet" href="css/theme/black.css" id="theme">
+        <link rel="stylesheet" href="css/theme/black.css">
     
         <link rel="stylesheet" href="lib/css/zenburn.css">
     
@@ -51,14 +51,14 @@
 	<section id="agenda" class="slide level2">
 <h1>Agenda</h1>
 <ol type="1">
-<li><code>whoami</code> and Motivation</li>
+<li>Who-am-I and Motivation</li>
 <li>Performance outside-in</li>
 <li>Performance inside-out</li>
 <li>Benchmarks and how to create them</li>
 </ol>
 </section>
-<section><section id="whoami-and-motivation" class="titleslide slide level1"><h1>whoami and Motivation</h1></section><section id="whoami" class="slide level2">
-<h1><code>whoami</code></h1>
+<section><section id="who-am-i-and-motivation" class="titleslide slide level1"><h1>Who-am-I and Motivation</h1></section><section id="who-am-i" class="slide level2">
+<h1>Who am I?</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -191,7 +191,7 @@ John</code></pre>
 </div>
 </section><section id="reference-numbers" class="slide level2">
 <h1>Reference Numbers</h1>
-<pre class="bash"><code>$ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
+<pre><code>$ dd if=/dev/zero of=/tmp/just_zeros bs=1G count=2
 2+0 records in
 2+0 records out
 2147483648 bytes (2.1 GB) copied, 2.94478 s, 729 MB/s
@@ -202,7 +202,7 @@ $ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 2147483648 bytes (2.1 GB) copied, 1.14782 s, 1.9 GB/s</code></pre>
 <p> </p>
 <p><strong>What can your hardware typically do?</strong></p>
-<p><code>dd</code>, <a href="http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/">ior</a>, <code>memhog</code>, <a href="https://www.cs.virginia.edu/stream/">stream</a>, ...</p>
+<p>dd, <a href="http://www.nersc.gov/users/computational-systems/cori/nersc-8-procurement/trinity-nersc-8-rfp/nersc-8-trinity-benchmarks/ior/">ior</a>, memhog, <a href="https://www.cs.virginia.edu/stream/">stream</a>, ...</p>
 <aside class="notes">
 <ul>
 <li>to search for the bottleneck, know your performance without it</li>
@@ -354,8 +354,12 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 </ul>
 </aside>
 </section><section id="textual-output-gprof" class="slide level2">
-<h1>Textual output, <code>gprof</code></h1>
-<pre><code>Flat profile:
+<h1>Textual output, gprof</h1>
+<pre><code>$ g++ -pg -O2 -std=c++11 vector_unroll_example.cpp
+$ ./a.out
+$ gprof ./a.out gmon.out &gt; analysis.txt
+$ head analysis.txt
+Flat profile:
 
 Each sample counts as 0.01 seconds.
   %   cumulative   self              self     total           
@@ -367,7 +371,7 @@ Each sample counts as 0.01 seconds.
   0.00      3.84     0.00        1     0.00     0.00  _GLOBAL__sub_I_main</code></pre>
 <p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
 </section><section id="simple-graphical-output-perftools" class="slide level2">
-<h1>Simple Graphical output, <code>perftools</code></h1>
+<h1>Simple Graphical output, perftools</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -397,7 +401,7 @@ Each sample counts as 0.01 seconds.
 </ul>
 </aside>
 </section><section id="using-flamegraphs-hotspot" class="slide level2">
-<h1>Using flamegraphs, <code>hotspot</code></h1>
+<h1>Using flamegraphs, hotspot</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -604,8 +608,8 @@ numactl -m0 -C0 ./my_app
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
-# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
--m0 -C0-3 ./my_app
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE \
+numactl -m0 -C0-3 ./my_app
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
@@ -618,8 +622,8 @@ numactl -m0 -C0 ./my_app
 <div class="col-6">
 <p>Stream Benchmark as Reference</p>
 <pre><code># export OMP_NUM_THREADS=1
-# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
--m0 -C0 ./stream
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE \
+numactl -m0 -C0 ./stream
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
@@ -630,8 +634,8 @@ numactl -m0 -C0 ./my_app
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
-# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE numactl \
--m0 -C0-3 ./stream
+# path/to/likwid-perfctr -f -c 0-4 -g FALSE_SHARE \
+numactl -m0 -C0-3 ./stream
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
