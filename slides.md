@@ -136,11 +136,11 @@ report bugs and questions there!
 
 ## Once in a while { data-background-image="img/frustration-cry-1682140_1920.jpg" }
 
-.container[
+.container-fluid[
 
 .row align-items-center[
 
-.col[
+.col-8[
 
 ```
 From: doe@theinstitute.de
@@ -468,6 +468,10 @@ Taking a balloon to get an overview of performance bottlenecks is possible.
 ## Textual output, `gprof`
 
 ```
+$ g++ -pg -O2 -std=c++11 vector_unroll_example.cpp
+$ ./a.out
+$ gprof ./a.out gmon.out > analysis.txt
+$ head analysis.txt
 Flat profile:
 
 Each sample counts as 0.01 seconds.
