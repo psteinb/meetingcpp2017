@@ -18,35 +18,6 @@ date: Nov 10, 2017, MeetingC++ 2017, Berlin
 
 # whoami and Motivation
 
-
-## Disclaimer
-
-
-.container-fluid[
-
-.row justify-content-center[
-
-  .col[
-
-![](img/opensource-550x475.png){ class="figure-img img-fluid" width="40%" }  
-
-**[github.com/psteinb/meetingcpp2017](https://github.com/psteinb/meetingcpp2017)**
-
-
-  .]
-
-.]
-
-.]
-
-
-:notes[
-
-report bugs and questions there!
-
-:]
-
-
 ## `whoami`
 
 .container-fluid[
@@ -116,6 +87,35 @@ report bugs and questions there!
 
 - biggest client
 - NEXT: How does my day look like sometimes ...
+
+:]
+
+
+
+## Disclaimer
+
+
+.container-fluid[
+
+.row justify-content-center[
+
+  .col[
+
+![](img/opensource-550x475.png){ class="figure-img img-fluid" width="40%" }  
+
+**[github.com/psteinb/meetingcpp2017](https://github.com/psteinb/meetingcpp2017)**
+
+
+  .]
+
+.]
+
+.]
+
+
+:notes[
+
+report bugs and questions there!
 
 :]
 
@@ -360,7 +360,7 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
   .col-4[
 
   - visualisation technique conceived by [Brendan Gregg](https://github.com/brendangregg) (Netflix)
-  - seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...
+  - seamless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...
   - based on collected counter samples and the stacktrace they were collected in
   
   .]
@@ -768,7 +768,7 @@ int main(int argc, char** argv){
 
 - **hypotheses**:  
 
-    + large 'unpredictable' jumps in memory access deminishes cache bandwidth
+    + large 'unpredictable' jumps in memory access diminishes cache bandwidth
     
     + [false sharing](https://en.wikipedia.org/wiki/False_sharing) forces cache line reloads as read-only and writable items may share the same cache line
 
@@ -884,7 +884,7 @@ Stream Benchmark as Reference
 - excellent tools available to find hot spots
 - once "found", talk to someone  
 (rubber duck or colleaque(s))
-- create falsifyable hypothesis
+- create falsifiable hypotheses
 - MEASURE!
 
 
@@ -944,6 +944,8 @@ int main(int argc, char** argv){
 
     std::cout << "we achieved a speed-up of " << t_p.count()/t_i.count() 
               << std::endl;
+              
+    return 0;
 }
 ```
 
@@ -988,7 +990,7 @@ int main(int argc, char** argv){
     
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0;i<n_repititions;++i)
+    for(int i = 0;i<n_repetitions;++i)
         result = production_code::algorithm();
    
     auto end = std::chrono::high_resolution_clock::now();
@@ -996,7 +998,7 @@ int main(int argc, char** argv){
     
     start = std::chrono::high_resolution_clock::now();
     
-    for(int i = 0;i<n_repititions;++i)
+    for(int i = 0;i<n_repetitions;++i)
         new_result = new_ideas::algorithm();
         
     end = std::chrono::high_resolution_clock::now();
@@ -1021,9 +1023,9 @@ int main(int argc, char** argv){
     //..
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start;
-    std::vector<duration_t> my_timings(n_repititions);
+    std::vector<duration_t> my_timings(n_repetitions);
 
-    for(int i = 0;i<n_repititions;++i){
+    for(int i = 0;i<n_repetitions;++i){
         start = std::chrono::high_resolution_clock::now();
         result = production_code::algorithm();
         my_timings[i] = std::chrono::high_resolution_clock::now() - start;
@@ -1033,7 +1035,7 @@ int main(int argc, char** argv){
 
     if(result == new_result){
         std::ofstream ofile("results.csv");ofile.open();
-        for(int i = 0;i<n_repititions;++i){
+        for(int i = 0;i<n_repetitions;++i){
             ofile << i << ",production," << prod_timings[i].count() << ",seconds" << std::endl;
         }
         //same with new_idea

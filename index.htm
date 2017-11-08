@@ -15,10 +15,9 @@
     <link rel="stylesheet" href="css/reveal.css"/>
         <link rel="stylesheet" href="css/theme/black.css" id="theme">
     
-    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
-
         <link rel="stylesheet" href="lib/css/zenburn.css">
     
+    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
     <!-- <link rel="stylesheet" href="my_reveal_overrides.css"/> -->
     
     <!-- If the query includes 'print-pdf', include the PDF print sheet -->
@@ -58,22 +57,7 @@
 <li>Benchmarks and how to create them</li>
 </ol>
 </section>
-<section><section id="whoami-and-motivation" class="titleslide slide level1"><h1>whoami and Motivation</h1></section><section id="disclaimer" class="slide level2">
-<h1>Disclaimer</h1>
-<div class="container-fluid">
-<div class="row justify-content-center">
-<div class="col">
-<figure>
-<img src="img/opensource-550x475.png" class="figure-img img-fluid" style="width:40.0%" />
-</figure>
-<p><strong><a href="https://github.com/psteinb/meetingcpp2017">github.com/psteinb/meetingcpp2017</a></strong></p>
-</div>
-</div>
-</div>
-<aside class="notes">
-<p>report bugs and questions there!</p>
-</aside>
-</section><section id="whoami" class="slide level2">
+<section><section id="whoami-and-motivation" class="titleslide slide level1"><h1>whoami and Motivation</h1></section><section id="whoami" class="slide level2">
 <h1><code>whoami</code></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
@@ -124,6 +108,21 @@
 <li>biggest client</li>
 <li>NEXT: How does my day look like sometimes ...</li>
 </ul>
+</aside>
+</section><section id="disclaimer" class="slide level2">
+<h1>Disclaimer</h1>
+<div class="container-fluid">
+<div class="row justify-content-center">
+<div class="col">
+<figure>
+<img src="img/opensource-550x475.png" class="figure-img img-fluid" style="width:40.0%" />
+</figure>
+<p><strong><a href="https://github.com/psteinb/meetingcpp2017">github.com/psteinb/meetingcpp2017</a></strong></p>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>report bugs and questions there!</p>
 </aside>
 </section></section>
 <section><section id="performance-outside-in" class="titleslide slide level1"><h1>Performance Outside-In</h1></section><section id="one-day-as-a-performance-engineer" class="slide level2">
@@ -289,7 +288,7 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 <div class="col-4">
 <ul>
 <li>visualisation technique conceived by <a href="https://github.com/brendangregg">Brendan Gregg</a> (Netflix)</li>
-<li>seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...</li>
+<li>seamless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...</li>
 <li>based on collected counter samples and the stacktrace they were collected in</li>
 </ul>
 </div>
@@ -569,7 +568,7 @@ int main(int argc, char** argv){
 <ul>
 <li><p><strong>hypotheses</strong>:</p>
 <ul>
-<li><p>large 'unpredictable' jumps in memory access deminishes cache bandwidth</p></li>
+<li><p>large 'unpredictable' jumps in memory access diminishes cache bandwidth</p></li>
 <li><p><a href="https://en.wikipedia.org/wiki/False_sharing">false sharing</a> forces cache line reloads as read-only and writable items may share the same cache line</p></li>
 </ul></li>
 </ul>
@@ -653,7 +652,7 @@ numactl -m0 -C0 ./my_app
 <li>excellent tools available to find hot spots</li>
 <li>once &quot;found&quot;, talk to someone<br />
 (rubber duck or colleaque(s))</li>
-<li>create falsifyable hypothesis</li>
+<li>create falsifiable hypotheses</li>
 <li>MEASURE!</li>
 </ul>
 </div>
@@ -700,6 +699,8 @@ int main(int argc, char** argv){
 
     std::cout &lt;&lt; &quot;we achieved a speed-up of &quot; &lt;&lt; t_p.count()/t_i.count() 
               &lt;&lt; std::endl;
+              
+    return 0;
 }</code></pre>
 </section><section id="check-for-correctness" class="slide level2">
 <h1>... check for correctness</h1>
@@ -737,7 +738,7 @@ int main(int argc, char** argv){
     
     auto start = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0;i&lt;n_repititions;++i)
+    for(int i = 0;i&lt;n_repetitions;++i)
         result = production_code::algorithm();
    
     auto end = std::chrono::high_resolution_clock::now();
@@ -745,7 +746,7 @@ int main(int argc, char** argv){
     
     start = std::chrono::high_resolution_clock::now();
     
-    for(int i = 0;i&lt;n_repititions;++i)
+    for(int i = 0;i&lt;n_repetitions;++i)
         new_result = new_ideas::algorithm();
         
     end = std::chrono::high_resolution_clock::now();
@@ -767,9 +768,9 @@ int main(int argc, char** argv){
     //..
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start;
-    std::vector&lt;duration_t&gt; my_timings(n_repititions);
+    std::vector&lt;duration_t&gt; my_timings(n_repetitions);
 
-    for(int i = 0;i&lt;n_repititions;++i){
+    for(int i = 0;i&lt;n_repetitions;++i){
         start = std::chrono::high_resolution_clock::now();
         result = production_code::algorithm();
         my_timings[i] = std::chrono::high_resolution_clock::now() - start;
@@ -779,7 +780,7 @@ int main(int argc, char** argv){
 
     if(result == new_result){
         std::ofstream ofile(&quot;results.csv&quot;);ofile.open();
-        for(int i = 0;i&lt;n_repititions;++i){
+        for(int i = 0;i&lt;n_repetitions;++i){
             ofile &lt;&lt; i &lt;&lt; &quot;,production,&quot; &lt;&lt; prod_timings[i].count() &lt;&lt; &quot;,seconds&quot; &lt;&lt; std::endl;
         }
         //same with new_idea

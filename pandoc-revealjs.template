@@ -26,8 +26,6 @@
     <link rel="stylesheet" href="css/theme/black.css" id="theme">
     $endif$
 
-    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
-
     $if(highlighting-css)$
     <style type="text/css">
       $highlighting-css$
@@ -36,6 +34,7 @@
     <link rel="stylesheet" href="lib/css/zenburn.css">
     $endif$
 
+    <link rel="stylesheet" href="css/my_reveal_overrides.css" id="theme">
     <!-- <link rel="stylesheet" href="my_reveal_overrides.css"/> -->
     
     <!-- If the query includes 'print-pdf', include the PDF print sheet -->
