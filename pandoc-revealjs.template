@@ -116,19 +116,17 @@
       minScale: 0.2,
       maxScale: 1.5,
 
-      theme: $if(theme)$'$theme$'$else$Reveal.getQueryHash().theme$endif$, // available themes are in /css/theme
-      transition: $if(transition)$'$transition$'$else$Reveal.getQueryHash().transition || 'default'$endif$, // default/cube/page/concave/zoom/linear/fade/none
+      transition: $if(transition)$'$transition$'$else$'slide'$endif$, // none/fade/slide/convex/concave/zoom
+
+      backgroundTransition: $if(backgroundTransition)$'$backgroundTransition$'$else$'fade'$endif$, // default/cube/page/concave/zoom/linear/fade/none
 
       // Optional libraries used to extend on reveal.js
       dependencies: [
-      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      $if(highlighting-css)$
-      //{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-      $else$
+      //{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
       { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-      $endif$
+      
       { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-      { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }//,
+      { src: 'plugin/notes/notes.js', async: true }//,
       //          { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; }, }
       //          { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
       ]});
