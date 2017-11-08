@@ -214,7 +214,7 @@ $ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 <h1>Profile with <a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
-<div class="col-8">
+<div class="col-9">
 <pre><code>$ perf record -g ./my-slow-binary
 [ perf record: Woken up 1 times to write data ]
 [ perf record: Captured and wrote 0.023 MB perf.data (75 samples) ]
@@ -235,12 +235,41 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
                        _int_realloc
                        page_fault</code></pre>
 </div>
-<div class="col-4">
+<div class="col-3">
 <ul>
-<li>instrument CPU performance counters, tracepoints and system probes</li>
 <li>lightweight sample based profiling</li>
 <li>per task, per CPU and per-workload counters</li>
-<li>on windows: <a href="https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal">xperf</a></li>
+<li>sample CPU performance counters, tracepoints or system probes</li>
+<li>on windows: <a href="https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal">xperf</a>/<a href="https://github.com/google/UIforETW">UIforETW</a></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="perf-what-is-a-callstack" class="slide level2">
+<h1>perf: what is a callstack?</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<p><object type="image/svg+xml" data="figure/stacktrace_illustration/stacktrace_dark.svg" width="40%"> Your browser does not support SVG </object></p>
+</div>
+</div>
+</div>
+</section><section id="perf-sampling-based-profiling" class="slide level2">
+<h1>perf: sampling based profiling</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<p><object type="image/svg+xml" data="figure/stacktrace_illustration/stacktrace_dark_with_traces.svg" width="60%"> Your browser does not support SVG </object></p>
+</div>
+<div class="col-4">
+<ul>
+<li>for every sampling event:
+<ul>
+<li>record call stack</li>
+<li>query hardware counters, e.g. consumed cpu-cycles</li>
+</ul></li>
+<li>must not be accurate</li>
+<li>very low overhead</li>
 </ul>
 </div>
 </div>
@@ -261,7 +290,7 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 <ul>
 <li>visualisation technique conceived by <a href="https://github.com/brendangregg">Brendan Gregg</a> (Netflix)</li>
 <li>seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...</li>
-<li>based on collected perf samples and the stacktrace they were collected in</li>
+<li>based on collected counter samples and the stacktrace they were collected in</li>
 </ul>
 </div>
 </div>
@@ -351,8 +380,8 @@ Each sample counts as 0.01 seconds.
 </div>
 </div>
 <p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
-</section><section id="using-a-pseudo-vm-kcachegrindvalgrind" class="slide level2">
-<h1>Using a pseudo-VM, <code>kcachegrind/valgrind</code></h1>
+</section><section id="valgrind-kcachegrind" class="slide level2">
+<h1>valgrind + kcachegrind</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -440,10 +469,9 @@ Each sample counts as 0.01 seconds.
 </aside>
 </section><section id="perf-for-hardware-exploration" class="slide level2">
 <h1>perf for hardware exploration?</h1>
-<p> </p>
 <div class="container-fluid">
 <div class="row align-items-center">
-<div class="col-8">
+<div class="col-9">
 <pre><code>$ perf list
 
 List of pre-defined events (to be used in -e):
@@ -466,7 +494,7 @@ List of pre-defined events (to be used in -e):
   L1-icache-load-misses                              [Hardware cache event]
   #...</code></pre>
 </div>
-<div class="col-4">
+<div class="col-3">
 <ul>
 <li>perf event list depends on kernel version</li>
 <li>hardware counters are not portable (specification change by vendors)</li>
@@ -475,13 +503,18 @@ List of pre-defined events (to be used in -e):
 </div>
 </div>
 </div>
+<aside class="notes">
+<ul>
+<li>I prefer LIKWID</li>
+</ul>
+</aside>
 </section><section id="test-hypothesis-with-likwid" class="slide level2">
 <h1>Test hypothesis with <a href="https://github.com/RRZE-HPC/likwid">likwid</a></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
 <figure>
-<img src="img/likwid-repo.png" alt="github.com/RRZE-HPC/likwid" class="figure-img img-fluid" style="width:100.0%" /><figcaption><a href="https://github.com/RRZE-HPC/likwid">github.com/RRZE-HPC/likwid</a></figcaption>
+<img src="img/likwid-repo.png" class="figure-img img-fluid" style="width:90.0%" />
 </figure>
 </div>
 </div>
@@ -490,6 +523,7 @@ List of pre-defined events (to be used in -e):
 <div class="row align-items-start">
 <div class="col">
 <ul>
+<li><a href="https://github.com/RRZE-HPC/likwid">github.com/RRZE-HPC/likwid</a></li>
 <li>open source Performance monitoring and benchmarking suite</li>
 <li>Linux only</li>
 </ul>
@@ -507,43 +541,32 @@ List of pre-defined events (to be used in -e):
 <h1>use case: Index Lists</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
-<div class="col">
+<div class="col-9">
 <pre><code>#include &lt;vector&gt;
 #include &quot;omp.h&quot;
 
-struct item 
-{
+struct item{
     std::vector&lt;float&gt; position, momentum;
-    std::vector&lt;int&gt;   nearest_neighbors;
-}
+    std::vector&lt;int&gt;   nearest_neighbors;}
 
 int main(int argc, char** argv){
-
     std::vector&lt;item&gt; world = generate(argc*10e6);
     
     for(int&amp; time_step : timelapse){
-        
         update(world);
         
         #pragma omp parallel for
         for(item&amp; it : world){
-            
             for(int&amp; index : it.nearest_neighbors){
-            
                 auto distance = calculate(it, world[index]);
                 if(distance &gt; threshold)
                     it.nearest_neighbors.remove(index);
-                
-            }
-        }
-    }
-    //store results
+            }}}
+    //..
 }</code></pre>
 </div>
-<div class="col">
+<div class="col-3">
 <ul>
-<li>code has a lot of problems related to memory layout</li>
-<li>index of nearest neighbor <code>item</code> stored in vector</li>
 <li><p><strong>hypotheses</strong>:</p>
 <ul>
 <li><p>large 'unpredictable' jumps in memory access deminishes cache bandwidth</p></li>
@@ -557,6 +580,8 @@ int main(int argc, char** argv){
 </div>
 <aside class="notes">
 <ul>
+<li>code has a lot of problems related to memory layout</li>
+<li>index of nearest neighbor <code>item</code> stored in vector</li>
 <li>only show measurement for false sharing for brevity</li>
 </ul>
 </aside>
@@ -568,19 +593,15 @@ int main(int argc, char** argv){
 <div class="col-6">
 <p>Use Case</p>
 <pre><code># export OMP_NUM_THREADS=1
-# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
--m0 -C0 ./my_app
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE \
+numactl -m0 -C0 ./my_app
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
-|        Runtime (RDTSC) [s]       |      11.2125 |
-|       Runtime unhalted [s]       |      17.7696 |
-|            Clock [MHz]           |    3536.3990 |
-|                CPI               |       0.4700 |
+//..
 |  Local LLC false sharing [MByte] |       0.0008 |
 |   Local LLC false sharing rate   | 5.608215e-10 |
-| Remote LLC false sharing [MByte] |       0.0001 |
-|   Remote LLC false sharing rate  | 8.628023e-11 |
+//..
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
@@ -589,14 +610,10 @@ int main(int argc, char** argv){
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
-|        Runtime (RDTSC) [s] STAT       |      32.5048 |
-|       Runtime unhalted [s] STAT       |      31.8024 |
-|            Clock [MHz] STAT           |    9484.2143 |
-|                CPI STAT               |       3.2922 |
+#..
 |  Local LLC false sharing [MByte] STAT |    2973.7637 |
 |   Local LLC false sharing rate STAT   |       0.0081 |
-| Remote LLC false sharing [MByte] STAT |       0.0007 |
-|   Remote LLC false sharing rate STAT  | 1.781667e-09 |
+#..
 +---------------------------------------|--------------|</code></pre>
 </div>
 <div class="col-6">
@@ -607,14 +624,10 @@ int main(int argc, char** argv){
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
-|        Runtime (RDTSC) [s]       |      15.3517 |
-|       Runtime unhalted [s]       |      24.1526 |
-|            Clock [MHz]           |    3580.4732 |
-|                CPI               |       1.0501 |
+#..
 |  Local LLC false sharing [MByte] |       0.0006 |
 |   Local LLC false sharing rate   | 6.057282e-10 |
-| Remote LLC false sharing [MByte] |       0.0006 |
-|   Remote LLC false sharing rate  | 6.057282e-10 |
+#..
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
@@ -623,14 +636,10 @@ int main(int argc, char** argv){
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
-|        Runtime (RDTSC) [s] STAT       |      19.1140 |
-|       Runtime unhalted [s] STAT       |      25.9206 |
-|            Clock [MHz] STAT           |   12688.3579 |
-|                CPI STAT               |       4.5057 |
+#..
 |  Local LLC false sharing [MByte] STAT |       0.1067 |
 |   Local LLC false sharing rate STAT   | 4.080027e-07 |
-| Remote LLC false sharing [MByte] STAT |       0.0012 |
-|   Remote LLC false sharing rate STAT  | 4.438572e-09 |
+#..
 +---------------------------------------|--------------|</code></pre>
 </div>
 </div>
@@ -719,10 +728,7 @@ int main(int argc, char** argv){
 }</code></pre>
 </section><section id="noisy-lab-under-your-fingers" class="slide level2">
 <h1>noisy lab under your fingers</h1>
-<pre><code>#include &lt;chrono&gt;
-#include &lt;iostream&gt;
-#include &quot;production_code.hpp&quot;
-#include &quot;new_ideas.hpp&quot;
+<pre><code>#include ...
 
 int main(int argc, char** argv){
 
@@ -753,11 +759,7 @@ int main(int argc, char** argv){
 }</code></pre>
 </section><section id="please-take-notes" class="slide level2">
 <h1>Please take notes</h1>
-<pre><code>#include &lt;chrono&gt;
-#include &lt;iostream&gt;
-#include &lt;ifstream&gt;
-#include &quot;production_code.hpp&quot;
-#include &quot;new_ideas.hpp&quot;
+<pre><code>#include ...
 
 using duration_t = std::chrono::duration&lt;double&gt;;
 
@@ -928,7 +930,7 @@ int main(int argc, char** argv){
 <h1>libbenchmark: simple approach</h1>
 <div class="container-fluid">
 <div class="row align-items-start">
-<div class="col">
+<div class="col-6">
 <pre><code>#include &lt;benchmark/benchmark.h&gt;
 #include &lt;vector&gt;
 
@@ -954,7 +956,7 @@ double sum(const container_type&amp; _data){
     return value;
 }</code></pre>
 </div>
-<div class="col">
+<div class="col-6">
 <pre><code>static void BM_integer_index(benchmark::State&amp; state) {
 
     const std::size_t len = 1 &lt;&lt; 20;
@@ -985,6 +987,16 @@ BENCHMARK_MAIN();</code></pre>
 </div>
 </div>
 </div>
+</section><section id="libbenchmark-simple-approach-output" class="slide level2">
+<h1>libbenchmark: simple approach output</h1>
+<pre><code>Run on (4 X 3600 MHz CPU s)
+2017-11-08 10:24:43
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+--------------------------------------------------------
+Benchmark                 Time           CPU Iterations
+--------------------------------------------------------
+BM_integer_index     922920 ns     915531 ns        764
+BM_range_based       937344 ns     929681 ns        768</code></pre>
 </section><section id="libbenchmark-advanced" class="slide level2">
 <h1>libbenchmark: advanced</h1>
 <div class="container-fluid">
@@ -1046,6 +1058,39 @@ BENCHMARK_MAIN();</code></pre>
 </ul>
 </aside>
 </div>
+</section><section id="libbenchmark-advanced-output" class="slide level2">
+<h1>libbenchmark: advanced output</h1>
+<pre><code>Run on (4 X 3600 MHz CPU s)
+2017-11-08 10:25:27
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+-------------------------------------------------------------------------
+Benchmark                                  Time           CPU Iterations
+-------------------------------------------------------------------------
+BM_integer_index&lt;int&gt;/64                  50 ns         50 ns   10000000
+BM_integer_index&lt;int&gt;/512                424 ns        423 ns    1634359
+BM_integer_index&lt;int&gt;/1024               864 ns        861 ns     772101
+BM_integer_index&lt;int&gt;/131072          112125 ns     111777 ns       6344
+BM_integer_index&lt;int&gt;/1048576         924382 ns     916717 ns        761
+BM_integer_index&lt;int&gt;/134217728    123700290 ns  122614766 ns          6
+BM_integer_index&lt;float&gt;/64                52 ns         51 ns   13374011
+BM_integer_index&lt;float&gt;/512              427 ns        425 ns    1641151
+BM_integer_index&lt;float&gt;/1024             863 ns        860 ns     772552
+BM_integer_index&lt;float&gt;/131072        111322 ns     111160 ns       6109
+BM_integer_index&lt;float&gt;/1048576       914593 ns     909174 ns        763
+BM_integer_index&lt;float&gt;/134217728  122954355 ns  122219776 ns          6
+BM_range_based&lt;int&gt;/64                    50 ns         50 ns   13580124
+BM_range_based&lt;int&gt;/512                  429 ns        429 ns    1570356
+BM_range_based&lt;int&gt;/1024                 866 ns        865 ns     815042
+BM_range_based&lt;int&gt;/131072            111289 ns     111139 ns       6316
+BM_range_based&lt;int&gt;/1048576           912475 ns     907277 ns        761
+BM_range_based&lt;int&gt;/134217728      122509880 ns  121832332 ns          6
+BM_range_based&lt;float&gt;/64                  48 ns         48 ns   13944707
+BM_range_based&lt;float&gt;/512                426 ns        426 ns    1637659
+BM_range_based&lt;float&gt;/1024               863 ns        862 ns     810743
+BM_range_based&lt;float&gt;/131072          110915 ns     110775 ns       6343
+BM_range_based&lt;float&gt;/1048576         917501 ns     912365 ns        735
+BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
+</code></pre>
 </section><section id="libbenchmark-reproduce-this" class="slide level2">
 <h1>libbenchmark: reproduce this!</h1>
 <div class="container-fluid">
@@ -1197,7 +1242,12 @@ BENCHMARK_MAIN();</code></pre>
 </div>
 </section><section id="final-words" class="slide level2">
 <h1>Final Words</h1>
-<p>C++ is a language considered &quot;fast&quot;. We, the community, need to live up to this goal and have robust and reproducible numbers!</p>
+<blockquote>
+<p><em>C++ is a language considered &quot;fast&quot;.</em></p>
+</blockquote>
+<blockquote>
+<p>We, the community, need to live up to this standard and have robust and reproducible performance numbers!</p>
+</blockquote>
 </section></section>
 <section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="gearshifft" class="slide level2">
 <h1>gearshifft</h1>

@@ -246,7 +246,7 @@ $ dd if=/dev/zero of=/dev/shm/2gb.zeros bs=1G count=2
 
 .row align-items-center[
 
-  .col-8[
+  .col-9[
 
 
 ```
@@ -273,18 +273,67 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
 
   .]
 
-  .col-4[
+  .col-3[
 
-  - instrument CPU performance counters, tracepoints and system probes
   - lightweight sample based profiling 
   - per task, per CPU and per-workload counters
-  - on windows: [xperf](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal)
+  - sample CPU performance counters, tracepoints or system probes
+  - on windows: [xperf](https://docs.microsoft.com/en-us/windows-hardware/test/wpt/wpt-getting-started-portal)/[UIforETW](https://github.com/google/UIforETW)
   
   .]
 
 .]
 
 .]
+
+## perf: what is a callstack? 
+
+.container-fluid[
+
+.row align-items-center[
+
+  .col[
+
+  <object type="image/svg+xml" data="figure/stacktrace_illustration/stacktrace_dark.svg" width="40%">
+  Your browser does not support SVG
+  </object>
+
+  .]
+  
+.]
+
+.]
+  
+
+## perf: sampling based profiling 
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+  <object type="image/svg+xml" data="figure/stacktrace_illustration/stacktrace_dark_with_traces.svg" width="60%">
+  Your browser does not support SVG
+  </object>
+
+  .]
+
+.col-4[
+
+- for every sampling event:
+    + record call stack
+    + query hardware counters, e.g. consumed cpu-cycles
+- must not be accurate
+- very low overhead
+
+.]
+
+
+.]
+
+.]
+
 
 
 ## [perf](https://perf.wiki.kernel.org/index.php/Main_Page) Reloaded with [FlameGraphs](https://github.com/brendangregg/FlameGraph)
@@ -312,7 +361,7 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 
   - visualisation technique conceived by [Brendan Gregg](https://github.com/brendangregg) (Netflix)
   - seemless integration into perf, dtrace, systemtap, XCode Instruments, Lightweight Java Profiler, Microsoft Visual Studio profiles, ...
-  - based on collected perf samples and the stacktrace they were collected in
+  - based on collected counter samples and the stacktrace they were collected in
   
   .]
 
@@ -457,7 +506,7 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
 
 
-## Using a pseudo-VM, `kcachegrind/valgrind`
+## valgrind + kcachegrind
 
 .container-fluid[
 
@@ -584,16 +633,11 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 
 ## perf for hardware exploration?
 
-
-&nbsp;
-
-
-
 .container-fluid[
 
 .row align-items-center[
 
-.col-8[
+.col-9[
 
 ```
 $ perf list
@@ -621,7 +665,7 @@ List of pre-defined events (to be used in -e):
 
 .]
 
-.col-4[
+.col-3[
 
 
 - perf event list depends on kernel version
@@ -636,7 +680,11 @@ List of pre-defined events (to be used in -e):
 .]
 
 
+:notes[
 
+- I prefer LIKWID
+
+:]
 
 
 ## Test hypothesis with [likwid](https://github.com/RRZE-HPC/likwid)
@@ -647,7 +695,7 @@ List of pre-defined events (to be used in -e):
 
   .col[
   
-  ![[github.com/RRZE-HPC/likwid](https://github.com/RRZE-HPC/likwid)](img/likwid-repo.png){ class="figure-img img-fluid" width="100%" }
+  ![](img/likwid-repo.png){ class="figure-img img-fluid" width="90%" }
   
   .]
 
@@ -661,6 +709,7 @@ List of pre-defined events (to be used in -e):
 
 .col[
 
+- [github.com/RRZE-HPC/likwid](https://github.com/RRZE-HPC/likwid)
 - open source Performance monitoring and benchmarking suite
 - Linux only
 
@@ -685,49 +734,38 @@ List of pre-defined events (to be used in -e):
 
 .row align-items-center[
 
-.col[
+.col-9[
 
 
 ```
 #include <vector>
 #include "omp.h"
 
-struct item 
-{
+struct item{
     std::vector<float> position, momentum;
-    std::vector<int>   nearest_neighbors;
-}
+    std::vector<int>   nearest_neighbors;}
 
 int main(int argc, char** argv){
-
     std::vector<item> world = generate(argc*10e6);
     
     for(int& time_step : timelapse){
-        
         update(world);
         
         #pragma omp parallel for
         for(item& it : world){
-            
             for(int& index : it.nearest_neighbors){
-            
                 auto distance = calculate(it, world[index]);
                 if(distance > threshold)
                     it.nearest_neighbors.remove(index);
-                
-            }
-        }
-    }
-    //store results
+            }}}
+    //..
 }
 ```
 
 .]
 
-.col[
+.col-3[
 
-- code has a lot of problems related to memory layout
-- index of nearest neighbor `item` stored in vector
 - **hypotheses**:  
 
     + large 'unpredictable' jumps in memory access deminishes cache bandwidth
@@ -749,6 +787,8 @@ Let's measure!
 
 :notes[
 
+- code has a lot of problems related to memory layout
+- index of nearest neighbor `item` stored in vector
 - only show measurement for false sharing for brevity
 
 :]
@@ -765,19 +805,15 @@ Use Case
 
 ```
 # export OMP_NUM_THREADS=1
-# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE numactl \
--m0 -C0 ./my_app
+# path/to/likwid-perfctr -f -c 0 -g FALSE_SHARE \
+numactl -m0 -C0 ./my_app
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
-|        Runtime (RDTSC) [s]       |      11.2125 |
-|       Runtime unhalted [s]       |      17.7696 |
-|            Clock [MHz]           |    3536.3990 |
-|                CPI               |       0.4700 |
+//..
 |  Local LLC false sharing [MByte] |       0.0008 |
 |   Local LLC false sharing rate   | 5.608215e-10 |
-| Remote LLC false sharing [MByte] |       0.0001 |
-|   Remote LLC false sharing rate  | 8.628023e-11 |
+//..
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
@@ -786,14 +822,10 @@ Use Case
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
-|        Runtime (RDTSC) [s] STAT       |      32.5048 |
-|       Runtime unhalted [s] STAT       |      31.8024 |
-|            Clock [MHz] STAT           |    9484.2143 |
-|                CPI STAT               |       3.2922 |
+#..
 |  Local LLC false sharing [MByte] STAT |    2973.7637 |
 |   Local LLC false sharing rate STAT   |       0.0081 |
-| Remote LLC false sharing [MByte] STAT |       0.0007 |
-|   Remote LLC false sharing rate STAT  | 1.781667e-09 |
+#..
 +---------------------------------------|--------------|
 ```
 
@@ -812,14 +844,10 @@ Stream Benchmark as Reference
 +----------------------------------|--------------+
 |              Metric              |    Core 0    |
 +----------------------------------|--------------+
-|        Runtime (RDTSC) [s]       |      15.3517 |
-|       Runtime unhalted [s]       |      24.1526 |
-|            Clock [MHz]           |    3580.4732 |
-|                CPI               |       1.0501 |
+#..
 |  Local LLC false sharing [MByte] |       0.0006 |
 |   Local LLC false sharing rate   | 6.057282e-10 |
-| Remote LLC false sharing [MByte] |       0.0006 |
-|   Remote LLC false sharing rate  | 6.057282e-10 |
+#..
 +----------------------------------|--------------+
 
 # export OMP_NUM_THREADS=4
@@ -828,14 +856,10 @@ Stream Benchmark as Reference
 +---------------------------------------|--------------|
 |                 Metric                |      Sum     |
 +---------------------------------------|--------------|
-|        Runtime (RDTSC) [s] STAT       |      19.1140 |
-|       Runtime unhalted [s] STAT       |      25.9206 |
-|            Clock [MHz] STAT           |   12688.3579 |
-|                CPI STAT               |       4.5057 |
+#..
 |  Local LLC false sharing [MByte] STAT |       0.1067 |
 |   Local LLC false sharing rate STAT   | 4.080027e-07 |
-| Remote LLC false sharing [MByte] STAT |       0.0012 |
-|   Remote LLC false sharing rate STAT  | 4.438572e-09 |
+#..
 +---------------------------------------|--------------|
 ```
 
@@ -955,10 +979,7 @@ int main(int argc, char** argv){
 
 
 ```
-#include <chrono>
-#include <iostream>
-#include "production_code.hpp"
-#include "new_ideas.hpp"
+#include ...
 
 int main(int argc, char** argv){
 
@@ -992,11 +1013,7 @@ int main(int argc, char** argv){
 ## Please take notes
 
 ```
-#include <chrono>
-#include <iostream>
-#include <ifstream>
-#include "production_code.hpp"
-#include "new_ideas.hpp"
+#include ...
 
 using duration_t = std::chrono::duration<double>;
 
@@ -1236,7 +1253,7 @@ __Question:__
 
 .row align-items-start[
 
-.col[
+.col-6[
 
 ```
 #include <benchmark/benchmark.h>
@@ -1266,7 +1283,7 @@ double sum(const container_type& _data){
 ```
 .]
 
-.col[
+.col-6[
 
 ```
 static void BM_integer_index(benchmark::State& state) {
@@ -1303,6 +1320,19 @@ BENCHMARK_MAIN();
 .]
 
 .]
+
+## libbenchmark: simple approach output
+
+```
+Run on (4 X 3600 MHz CPU s)
+2017-11-08 10:24:43
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+--------------------------------------------------------
+Benchmark                 Time           CPU Iterations
+--------------------------------------------------------
+BM_integer_index     922920 ns     915531 ns        764
+BM_range_based       937344 ns     929681 ns        768
+```
 
 
 ## libbenchmark: advanced
@@ -1376,6 +1406,43 @@ BENCHMARK_TEMPLATE(BM_integer_index,int)
 - too bad: fixtures and templated benchmarks are lacking
 
 :]
+
+## libbenchmark: advanced output
+
+```
+Run on (4 X 3600 MHz CPU s)
+2017-11-08 10:25:27
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+-------------------------------------------------------------------------
+Benchmark                                  Time           CPU Iterations
+-------------------------------------------------------------------------
+BM_integer_index<int>/64                  50 ns         50 ns   10000000
+BM_integer_index<int>/512                424 ns        423 ns    1634359
+BM_integer_index<int>/1024               864 ns        861 ns     772101
+BM_integer_index<int>/131072          112125 ns     111777 ns       6344
+BM_integer_index<int>/1048576         924382 ns     916717 ns        761
+BM_integer_index<int>/134217728    123700290 ns  122614766 ns          6
+BM_integer_index<float>/64                52 ns         51 ns   13374011
+BM_integer_index<float>/512              427 ns        425 ns    1641151
+BM_integer_index<float>/1024             863 ns        860 ns     772552
+BM_integer_index<float>/131072        111322 ns     111160 ns       6109
+BM_integer_index<float>/1048576       914593 ns     909174 ns        763
+BM_integer_index<float>/134217728  122954355 ns  122219776 ns          6
+BM_range_based<int>/64                    50 ns         50 ns   13580124
+BM_range_based<int>/512                  429 ns        429 ns    1570356
+BM_range_based<int>/1024                 866 ns        865 ns     815042
+BM_range_based<int>/131072            111289 ns     111139 ns       6316
+BM_range_based<int>/1048576           912475 ns     907277 ns        761
+BM_range_based<int>/134217728      122509880 ns  121832332 ns          6
+BM_range_based<float>/64                  48 ns         48 ns   13944707
+BM_range_based<float>/512                426 ns        426 ns    1637659
+BM_range_based<float>/1024               863 ns        862 ns     810743
+BM_range_based<float>/131072          110915 ns     110775 ns       6343
+BM_range_based<float>/1048576         917501 ns     912365 ns        735
+BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
+
+```
+
 
 ## libbenchmark: reproduce this!
 
@@ -1568,7 +1635,13 @@ With automated ensemble based benchmarks.
 
 ## Final Words
 
-C++ is a language considered "fast". We, the community, need to live up to this goal and have robust and reproducible numbers!
+
+
+> *C++ is a language considered "fast".*
+
+> We, the community, need to live up to this standard and have robust and reproducible performance numbers!
+
+
 
 # Backup
 
