@@ -48,15 +48,38 @@
 	  <h3 class="date">Nov 10, 2017, MeetingC++ 2017, Berlin</h3>
 	</section>
 		
-	<section id="agenda" class="slide level2">
+	<section><section id="real-life-performance-optimisation-is-never" class="titleslide slide level1"><h1>Real-life performance optimisation is never</h1></section><section id="as-simple-as-this" class="slide level2">
+<h1>as simple as this</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/allinea_performance_roadmap.jpg" class="figure-img img-fluid" style="width:70.0%" />
+</figure>
+</div>
+</div>
+</div>
+</section><section id="more-like-this" class="slide level2">
+<h1>more like this</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col">
+<figure>
+<img src="img/dark_Odysseus_Journey_zoom.png" class="figure-img img-fluid" style="width:100.0%" />
+</figure>
+</div>
+</div>
+</div>
+</section><section id="agenda" class="slide level2">
 <h1>Agenda</h1>
-<ol type="1">
-<li>Who-am-I and Motivation</li>
+<ol start="0" type="1">
+<li>Motivation</li>
+<li>Who-am-I</li>
 <li>Performance outside-in</li>
 <li>Performance inside-out</li>
 <li>Benchmarks and how to create them</li>
 </ol>
-</section>
+</section></section>
 <section><section id="who-am-i-and-motivation" class="titleslide slide level1"><h1>Who-am-I and Motivation</h1></section><section id="who-am-i" class="slide level2">
 <h1>Who am I?</h1>
 <div class="container-fluid">
@@ -124,6 +147,27 @@
 <aside class="notes">
 <p>report bugs and questions there!</p>
 </aside>
+</section><section id="before-i-begin" class="slide level2">
+<h1>Before I begin</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/Mars_Climate_Orbiter_2.jpg" alt="Mars Climate Orbiter (1998)" class="figure-img img-fluid" style="width:70.0%" /><figcaption><a href="https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Encounter_with_Mars">Mars Climate Orbiter (1998)</a></figcaption>
+</figure>
+</div>
+<div class="col-4">
+<blockquote>
+<p>All of my slides assume, that the code provides correct results!</p>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>Nobody wants fast code, that is wrong!</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
 </section></section>
 <section><section id="performance-outside-in" class="titleslide slide level1"><h1>Performance Outside-In</h1></section><section id="one-day-as-a-performance-engineer" class="slide level2">
 <h1>One day as a Performance Engineer</h1>
@@ -265,14 +309,19 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
 <li>for every sampling event:
 <ul>
 <li>record call stack</li>
-<li>query hardware counters, e.g. consumed cpu-cycles</li>
+<li>query hardware counters, e.g. cpu-cycles</li>
 </ul></li>
-<li>must not be accurate</li>
-<li>very low overhead</li>
+<li>sampling must not be accurate</li>
 </ul>
 </div>
 </div>
 </div>
+<aside class="notes">
+<ul>
+<li>hardware counters = low overhead</li>
+<li>missing accuracy != problem on nondeterministic system</li>
+</ul>
+</aside>
 </section><section id="perf-reloaded-with-flamegraphs" class="slide level2">
 <h1><a href="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> Reloaded with <a href="https://github.com/brendangregg/FlameGraph">FlameGraphs</a></h1>
 <div class="container-fluid">
@@ -333,10 +382,8 @@ $ ./flamegraph.pl out.folded &gt; perf_samples.svg</code></pre>
 </div>
 <aside class="notes">
 <ul>
-<li>performance profile shows i/o spinning wildly</li>
-<li>storage hardware was malfunctioning</li>
-<li><p>this graph = cpu_cycles; alternative = i/o flamegraph</p></li>
-<li><p><strong>so far</strong>: didn't touch the source code or build it</p></li>
+<li>this graph = cpu_cycles; alternative = i/o flamegraph</li>
+<li><strong>so far</strong>: didn't touch the source code or build it</li>
 </ul>
 </aside>
 </section><section id="bottom-line" class="slide level2" data-background-image="img/balloon.jpeg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;">
@@ -371,11 +418,10 @@ Each sample counts as 0.01 seconds.
   0.00      3.84     0.00        1     0.00     0.00  _GLOBAL__sub_I_main</code></pre>
 <p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
 </section><section id="simple-graphical-output-perftools" class="slide level2">
-<h1>Simple Graphical output, perftools</h1>
+<h1>Simple Graphical output, <a href="https://github.com/gperftools/gperftools">perftools</a></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
-<p><!-- <object type="image/svg+xml" data="figure/profiling/perftools/pprof21143.0.svg" width="90%"> --> <!-- Your browser does not support SVG --> <!-- </object> --></p>
 <figure>
 <img src="figure/profiling/perftools/pprof21143.0.png" class="figure-img img-fluid" style="width:90.0%" />
 </figure>
@@ -384,7 +430,7 @@ Each sample counts as 0.01 seconds.
 </div>
 <p>Profile from <a href="https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp">Peter Gottschling's example on vector unrolling</a>.</p>
 </section><section id="valgrind-kcachegrind" class="slide level2">
-<h1>valgrind + kcachegrind</h1>
+<h1><a href="valgrind.org">valgrind</a> + kcachegrind</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -401,7 +447,7 @@ Each sample counts as 0.01 seconds.
 </ul>
 </aside>
 </section><section id="using-flamegraphs-hotspot" class="slide level2">
-<h1>Using flamegraphs, hotspot</h1>
+<h1>Using flamegraphs, <a href="https://www.kdab.com/hotspot-gui-linux-perf-profiler/">hotspot</a></h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -413,8 +459,8 @@ Each sample counts as 0.01 seconds.
 </div>
 <aside class="notes">
 <ul>
-<li>thanks to KDAB</li>
-<li>well done tool with bright future</li>
+<li>thanks to Millian Wolff (KDAB)</li>
+<li>well done OSS tool with bright future</li>
 </ul>
 </aside>
 </section><section id="proprietary-tools" class="slide level2">
@@ -679,9 +725,11 @@ numactl -m0 -C0-3 ./stream
 <blockquote>
 <p>Klaus Iglberger: Guys that do know a lot about performance, do a lot of manual unrolling (manual vectorization). Apparently they don't trust the compiler too much. What is your take on this?</p>
 </blockquote>
+<div class="fragment">
 <blockquote>
 <p>Chandler: How do you define &quot;poeple who know a lot about performance&quot;? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop.</p>
 </blockquote>
+</div>
 </section><section id="chrono-is-your-friend" class="slide level2">
 <h1>chrono is your friend</h1>
 <pre><code>#include &lt;chrono&gt;
@@ -780,7 +828,7 @@ int main(int argc, char** argv){
         my_timings[i] = std::chrono::high_resolution_clock::now() - start;
     }
    
-    //same with new_idea
+    //same with new_result = new_ideas::algorithm()
 
     if(result == new_result){
         std::ofstream ofile(&quot;results.csv&quot;);ofile.open();
@@ -851,7 +899,7 @@ int main(int argc, char** argv){
 <div class="row align-items-center">
 <div class="col">
 <figure>
-<img src="figure/quick_bench_chart_errorbars.png" alt="ensemble variances tell a story" class="figure-img img-fluid" style="width:100.0%" /><figcaption>ensemble variances tell a story</figcaption>
+<img src="figure/quick_bench_mock.png" alt="Ensemble variances tell a story!" class="figure-img img-fluid" style="width:100.0%" /><figcaption><strong>Ensemble variances tell a story!</strong></figcaption>
 </figure>
 </div>
 </div>
@@ -872,7 +920,9 @@ int main(int argc, char** argv){
 <p>T. Hoefler et al, <a href="https://dl.acm.org/citation.cfm?id=2807644">&quot;Scientific Benchmarking of Parallel Computing Systems - Twelve ways to tell the masses when reporting performance results&quot;</a>, <br>SC '15 Proceedings, 2015</p>
 </div>
 <div class="col-4">
-<p><strong>Can't this be automated?</strong></p>
+<blockquote>
+<p>Can't this be automated?</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -1118,35 +1168,35 @@ BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
 <h1>There is more</h1>
 <table>
 <colgroup>
+<col style="width: 25%" />
+<col style="width: 7%" />
 <col style="width: 26%" />
-<col style="width: 8%" />
-<col style="width: 27%" />
-<col style="width: 39%" />
+<col style="width: 40%" />
 </colgroup>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><a href="https://github.com/nickbruun/hayai">hayai</a></td>
 <td style="text-align: center;">229</td>
-<td>- based on googletest <br> - random order <br> - fixture support</td>
-<td style="text-align: left;">- no csv output <br> - online docs? <br> - commit activity? <br> - no donotoptimize</td>
+<td style="text-align: left;">- based on googletest <br> - random order <br> - fixture support</td>
+<td style="text-align: left;">- no csv output <br> - online docs? commit activity?<br> - no donotoptimize <br> - max/min/means reported by default</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><a href="https://github.com/DigitalInBlue/Celero">celero</a></td>
 <td style="text-align: center;">249</td>
-<td>- no dependencies <br> - baseline <br> - fixture support</td>
-<td style="text-align: left;">- no csv output</td>
+<td style="text-align: left;">- no dependencies <br> - baseline <br> - fixture support</td>
+<td style="text-align: left;">- no csv output <br> - means reported by default</td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><a href="https://nonius.io/">nonius</a></td>
 <td style="text-align: center;">49-194</td>
-<td>- header-only <br> - depends on boost <br> - super statistics summary</td>
+<td style="text-align: left;">- header-only <br> - depends on boost <br> - super statistics summary</td>
 <td style="text-align: left;">- confusing repo structure <br> - buggy example(s) <br> - confidence intervals fixed to <br> normal distribution <br> - no donotoptimize</td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><a href="https://github.com/google/benchmark">libbenchmark</a></td>
 <td style="text-align: center;">1985</td>
-<td>- no dependencies <br> - feature rich</td>
-<td style="text-align: left;">- templated versus fixture based setup</td>
+<td style="text-align: left;">- no dependencies <br> - feature rich</td>
+<td style="text-align: left;">- templated versus fixture based setup <br> - means reported by default</td>
 </tr>
 </tbody>
 </table>
@@ -1201,6 +1251,25 @@ BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
 </div>
 </div>
 </div>
+</section><section id="roofline-for-real" class="slide level2">
+<h1>roofline for real</h1>
+<div class="container-fluid">
+<div class="row align-items-center">
+<div class="col-8">
+<figure>
+<img src="img/gearshifft_results_r2c_vs_c2c_a.png" alt="complex vs. real FFT transforms" class="figure-img img-fluid" style="width:70.0%" /><figcaption>complex vs. real FFT transforms</figcaption>
+</figure>
+</div>
+<div class="col">
+<p><em><a href="https://github.com/mpicbg-scicomp/gearshifft">gearshifft</a> FFT benchmark</em></p>
+<ul>
+<li>co-authored with TU Dresden</li>
+<li>note the variances!</li>
+<li>published at ISC'17</li>
+</ul>
+</div>
+</div>
+</div>
 </section><section id="bottom-line-2" class="slide level2" data-background-image="img/pacman-games.jpg" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;">
 <h1>Bottom Line</h1>
 <ul>
@@ -1250,12 +1319,21 @@ BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
 <blockquote>
 <p><em>C++ is a language considered &quot;fast&quot;.</em></p>
 </blockquote>
+<div class="fragment">
 <blockquote>
 <p>We, the community, need to live up to this standard and have robust and reproducible performance numbers!</p>
 </blockquote>
+</div>
+<div class="fragment">
+<p> </p>
+<p><em>Thank you for your attention!</em></p>
+</div>
 </section></section>
-<section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="gearshifft" class="slide level2">
-<h1>gearshifft</h1>
+<section><section id="backup" class="titleslide slide level1"><h1>Backup</h1></section><section id="section" class="slide level2">
+<h1></h1>
+<figure>
+<img src="img/sum_of_int_vs_float.png" class="figure-img img-fluid" style="width:75.0%" />
+</figure>
 </section></section>
       </div>
     </div>

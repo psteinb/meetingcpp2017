@@ -7,10 +7,47 @@ date: Nov 10, 2017, MeetingC++ 2017, Berlin
 ---
 
 
+# Real-life performance optimisation is never
+
+## as simple as this
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![](img/allinea_performance_roadmap.jpg){ class="figure-img img-fluid" width="70%" }
+
+.]
+
+.]
+
+.]
+
+
+## more like this
+
+
+.container-fluid[
+
+.row align-items-center[
+
+.col[
+
+![](img/dark_Odysseus_Journey_zoom.png){ class="figure-img img-fluid" width="100%" }
+
+.]
+
+.]
+
+.]
+
+
 ## Agenda 
 
-
-1. Who-am-I and Motivation
+0. Motivation
+1. Who-am-I
 2. Performance outside-in
 3. Performance inside-out
 4. Benchmarks and how to create them
@@ -118,6 +155,37 @@ date: Nov 10, 2017, MeetingC++ 2017, Berlin
 report bugs and questions there!
 
 :]
+
+
+## Before I begin
+
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+
+![[Mars Climate Orbiter (1998)](https://en.wikipedia.org/wiki/Mars_Climate_Orbiter#Encounter_with_Mars)](img/Mars_Climate_Orbiter_2.jpg){ class="figure-img img-fluid" width="70%" }  
+
+
+  .]
+
+.col-4[
+
+> All of my slides assume, that the code provides correct results!
+
+. . .
+
+> Nobody wants fast code, that is wrong!
+
+.]
+
+.]
+
+.]
+
 
 
 # Performance Outside-In
@@ -323,9 +391,8 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
 
 - for every sampling event:
     + record call stack
-    + query hardware counters, e.g. consumed cpu-cycles
-- must not be accurate
-- very low overhead
+    + query hardware counters, e.g. cpu-cycles
+- sampling must not be accurate
 
 .]
 
@@ -333,6 +400,14 @@ no symbols found in /usr/bin/dd, maybe install a debug package?
 .]
 
 .]
+
+
+:notes[
+
+- hardware counters = low overhead
+- missing accuracy != problem on nondeterministic system
+
+:]
 
 
 
@@ -437,13 +512,11 @@ $ ./flamegraph.pl out.folded > perf_samples.svg
 
 :notes[
 
-- performance profile shows i/o spinning wildly
-- storage hardware was malfunctioning
 - this graph = cpu_cycles; alternative = i/o flamegraph
-
 - **so far**: didn't touch the source code or build it
 
 :]
+
 
 ## Bottom Line { data-background-image="img/balloon.jpeg" style="background: rgba(105,105,105, 0.8); border-radius: 20px;"}
 
@@ -487,17 +560,13 @@ Each sample counts as 0.01 seconds.
 Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
 
 
-## Simple Graphical output, perftools
+## Simple Graphical output, [perftools](https://github.com/gperftools/gperftools)
 
 .container-fluid[
 
 .row align-items-center[
 
   .col[
-  
-  <!-- <object type="image/svg+xml" data="figure/profiling/perftools/pprof21143.0.svg" width="90%"> -->
-  <!-- Your browser does not support SVG -->
-  <!-- </object> -->
   
   ![](figure/profiling/perftools/pprof21143.0.png){ class="figure-img img-fluid" width="90%" }  
   
@@ -510,7 +579,7 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
 
 
-## valgrind + kcachegrind
+## [valgrind](valgrind.org) + kcachegrind
 
 .container-fluid[
 
@@ -526,6 +595,7 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 
 .]
 
+
 Profile from [Peter Gottschling's example on vector unrolling](https://github.com/petergottschling/discovering_modern_cpp/blob/master/c%2B%2B11/vector_unroll_example.cpp).
 
 
@@ -536,7 +606,7 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 :]
 
 
-## Using flamegraphs, hotspot
+## Using flamegraphs, [hotspot](https://www.kdab.com/hotspot-gui-linux-perf-profiler/)
 
 .container-fluid[
 
@@ -555,8 +625,8 @@ Profile from [Peter Gottschling's example on vector unrolling](https://github.co
 
 :notes[
 
-- thanks to KDAB
-- well done tool with bright future
+- thanks to Millian Wolff (KDAB)
+- well done OSS tool with bright future
 
 :]
 
@@ -923,6 +993,8 @@ numactl -m0 -C0-3 ./stream
 
 > Klaus Iglberger: Guys that do know a lot about performance, do a lot of manual unrolling (manual vectorization). Apparently they don't trust the compiler too much. What is your take on this?
 
+. . .
+
 > Chandler: How do you define "poeple who know a lot about performance"? Serious question. So I work with Google's optimisation team who is responsible for making our C++ code run fast. And I have never seen them manually unroll a loop. 
 
 
@@ -1035,7 +1107,7 @@ int main(int argc, char** argv){
         my_timings[i] = std::chrono::high_resolution_clock::now() - start;
     }
    
-    //same with new_idea
+    //same with new_result = new_ideas::algorithm()
 
     if(result == new_result){
         std::ofstream ofile("results.csv");ofile.open();
@@ -1131,7 +1203,7 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 
 .col[
 
-![ensemble variances tell a story](figure/quick_bench_chart_errorbars.png){ class="figure-img img-fluid" width="100%" }
+![**Ensemble variances tell a story!**](figure/quick_bench_mock.png){ class="figure-img img-fluid" width="100%" }
 
 .]
 
@@ -1164,7 +1236,7 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 
 .col-4[
 
-__Can't this be automated?__
+> Can't this be automated?
 
 .]
 
@@ -1477,26 +1549,26 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 
 ## There is more
 
-------------------------- ------- -------------------------- ---------------------------------------
- [hayai][haylink]          229    - based on googletest <br> - no csv output <br>                   
-                                  - random order <br>        - online docs? <br>
-                                  - fixture support          - commit activity? <br>
-                                                             - no donotoptimize
-                                                                                                                                 
- [celero][cellink]         249    - no dependencies <br>     - no csv output
-                                  - baseline <br>
-                                  - fixture support
-                                         
- [nonius][nonlink]         49-194 - header-only <br>         - confusing repo structure <br>
-                                  - depends on boost <br>    - buggy example(s) <br>
-                                  - super statistics summary - confidence intervals fixed to <br> 
-                                                               normal distribution <br>
-                                                             - no donotoptimize
-                                                                                          
- [libbenchmark][benlink]   1985   - no dependencies <br>     - templated versus fixture based setup
-                                  - feature rich               
+------------------------- ------- --------------------------- ------------------------------------------
+ [hayai][haylink]          229    - based on googletest <br>  - no csv output <br>                   
+                                  - random order <br>         - online docs? commit activity?<br>
+                                  - fixture support           - no donotoptimize <br>
+                                                              - max/min/means reported by default
+                                                                                                                                  
+ [celero][cellink]         249    - no dependencies <br>      - no csv output <br>
+                                  - baseline <br>             - means reported by default
+                                  - fixture support           
+                                                              
+ [nonius][nonlink]         49-194 - header-only <br>          - confusing repo structure <br>
+                                  - depends on boost <br>     - buggy example(s) <br>
+                                  - super statistics summary  - confidence intervals fixed to <br> 
+                                                                normal distribution <br>
+                                                              - no donotoptimize
+                                                                                           
+ [libbenchmark][benlink]   1985   - no dependencies <br>      - templated versus fixture based setup <br>
+                                  - feature rich              - means reported by default  
                            
-------------------------- ------- -------------------------- ---------------------------------------
+------------------------- ------- --------------------------- -------------------------------------------
 
 
 [haylink]: https://github.com/nickbruun/hayai
@@ -1566,6 +1638,33 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 .]
 
 
+## roofline for real
+
+.container-fluid[
+
+.row align-items-center[
+
+.col-8[
+
+![complex vs. real FFT transforms](img/gearshifft_results_r2c_vs_c2c_a.png){ class="figure-img img-fluid" width="70%" }
+
+.]
+
+.col[
+
+*[gearshifft](https://github.com/mpicbg-scicomp/gearshifft) FFT benchmark*
+
+- co-authored with TU Dresden
+- note the variances!
+- published at ISC'17
+
+.]
+
+.]
+
+.]
+
+
 ## Bottom Line { data-background-image="img/pacman-games.jpg" style="margin-top: -200px; background: rgba(1,21,26, 0.8); border-radius: 20px;" }
 
 - your requirements are your guiding light in the dungeon
@@ -1601,7 +1700,10 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 
 .]
 
-.]
+.] 
+
+
+
 
 .container-fluid[
 
@@ -1626,7 +1728,6 @@ Profile and check your hypothesis.
 
 .col-4[
 
-
 __Survive the dungeon__
 
 With automated ensemble based benchmarks.
@@ -1642,13 +1743,22 @@ With automated ensemble based benchmarks.
 ## Final Words
 
 
-
 > *C++ is a language considered "fast".*
 
+. . .
+
 > We, the community, need to live up to this standard and have robust and reproducible performance numbers!
+
+. . . 
+
+&nbsp;
+
+_Thank you for your attention!_
 
 
 
 # Backup
 
-## gearshifft
+## 
+
+![](img/sum_of_int_vs_float.png){ class="figure-img img-fluid" width="75%" }
