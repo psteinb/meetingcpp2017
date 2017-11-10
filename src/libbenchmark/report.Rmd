@@ -70,4 +70,3 @@ compare_plot = compare_plot + xlab("benchmark") + ylab("realtime / [ms]")
 compare_plot  
 ```  
 
-Looks like there is a tendency that integer based loops run faster on my laptop when accessing integer data! Interesting. Something worthwhile following up.

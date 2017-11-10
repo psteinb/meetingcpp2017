@@ -934,8 +934,8 @@ int main(int argc, char** argv){
 <li>fight the in-silico crisis</li>
 </ul>
 </aside>
-</section><section id="libbenchmark" class="slide level2">
-<h1>libbenchmark</h1>
+</section><section id="googlebenchmark" class="slide level2">
+<h1>google/benchmark</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
@@ -964,8 +964,8 @@ int main(int argc, char** argv){
 </div>
 </div>
 </div>
-</section><section id="libbenchmark-in-action" class="slide level2">
-<h1>libbenchmark: in action</h1>
+</section><section id="benchmark-in-action" class="slide level2">
+<h1>benchmark: in action</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col-8">
@@ -981,8 +981,8 @@ int main(int argc, char** argv){
 </div>
 </div>
 </div>
-</section><section id="libbenchmark-simple-approach" class="slide level2">
-<h1>libbenchmark: simple approach</h1>
+</section><section id="benchmark-simple-approach" class="slide level2">
+<h1>benchmark: simple approach</h1>
 <div class="container-fluid">
 <div class="row align-items-start">
 <div class="col-6">
@@ -1042,8 +1042,8 @@ BENCHMARK_MAIN();</code></pre>
 </div>
 </div>
 </div>
-</section><section id="libbenchmark-simple-approach-output" class="slide level2">
-<h1>libbenchmark: simple approach output</h1>
+</section><section id="benchmark-simple-approach-output" class="slide level2">
+<h1>benchmark: simple approach output</h1>
 <pre><code>Run on (4 X 3600 MHz CPU s)
 2017-11-08 10:24:43
 ***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
@@ -1052,8 +1052,8 @@ Benchmark                 Time           CPU Iterations
 --------------------------------------------------------
 BM_integer_index     922920 ns     915531 ns        764
 BM_range_based       937344 ns     929681 ns        768</code></pre>
-</section><section id="libbenchmark-advanced" class="slide level2">
-<h1>libbenchmark: advanced</h1>
+</section><section id="benchmark-advanced" class="slide level2">
+<h1>benchmark: advanced</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col-7">
@@ -1113,8 +1113,8 @@ BENCHMARK_MAIN();</code></pre>
 </ul>
 </aside>
 </div>
-</section><section id="libbenchmark-advanced-output" class="slide level2">
-<h1>libbenchmark: advanced output</h1>
+</section><section id="benchmark-advanced-output" class="slide level2">
+<h1>benchmark: advanced output</h1>
 <pre><code>Run on (4 X 3600 MHz CPU s)
 2017-11-08 10:25:27
 ***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
@@ -1146,21 +1146,22 @@ BM_range_based&lt;float&gt;/131072          110915 ns     110775 ns       6343
 BM_range_based&lt;float&gt;/1048576         917501 ns     912365 ns        735
 BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
 </code></pre>
-</section><section id="libbenchmark-reproduce-this" class="slide level2">
-<h1>libbenchmark: reproduce this!</h1>
+</section><section id="benchmark-reproduce-this" class="slide level2">
+<h1>benchmark: reproduce this!</h1>
 <div class="container-fluid">
 <div class="row align-items-center">
 <div class="col">
 <figure>
-<img src="src/libbenchmark/comparison.png" alt="gcc 6.4.1, libbbenchmark 1.3,  code available in this repo" class="figure-img img-fluid" style="width:100.0%" /><figcaption>gcc 6.4.1, libbbenchmark 1.3, <br><a href="src/libbenchmark/README.md">code available in this repo</a></figcaption>
+<img src="src/libbenchmark/comparison_O2.png" alt="gcc 6.4.1, libbbenchmark 1.3,  code available in this repo" class="figure-img img-fluid" style="width:100.0%" /><figcaption>gcc 6.4.1, libbbenchmark 1.3, <br><a href="src/libbenchmark/README.md">code available in this repo</a></figcaption>
 </figure>
 </div>
 <div class="col">
 <ul>
-<li>interesting: Matt Godbolt's claim appears to depent on the data type of the container float/int</li>
-<li>food for thought: compiler or stdlib implementation or ...</li>
 <li>file an <a href="https://github.com/psteinb/meetingcpp2017">issue</a> if you reproduced this!</li>
 </ul>
+<pre><code>$ cd src/libbenchmark
+$ //install libbenchmark &amp; tidyverse R package
+$ CXXFLAGS=-O2 make report</code></pre>
 </div>
 </div>
 </div>
@@ -1168,32 +1169,32 @@ BM_range_based&lt;float&gt;/134217728    122908318 ns  122219268 ns          6
 <h1>There is more</h1>
 <table>
 <colgroup>
-<col style="width: 25%" />
+<col style="width: 30%" />
 <col style="width: 7%" />
-<col style="width: 26%" />
-<col style="width: 40%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
 </colgroup>
 <tbody>
 <tr class="odd">
-<td style="text-align: center;"><a href="https://github.com/nickbruun/hayai">hayai</a></td>
+<td style="text-align: center;"><a href="https://github.com/nickbruun/hayai">nickbruun/hayai</a></td>
 <td style="text-align: center;">229</td>
 <td style="text-align: left;">- based on googletest <br> - random order <br> - fixture support</td>
 <td style="text-align: left;">- no csv output <br> - online docs? commit activity?<br> - no donotoptimize <br> - max/min/means reported by default</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><a href="https://github.com/DigitalInBlue/Celero">celero</a></td>
+<td style="text-align: center;"><a href="https://github.com/DigitalInBlue/Celero">DigitalInBlue/celero</a></td>
 <td style="text-align: center;">249</td>
 <td style="text-align: left;">- no dependencies <br> - baseline <br> - fixture support</td>
 <td style="text-align: left;">- no csv output <br> - means reported by default</td>
 </tr>
 <tr class="odd">
-<td style="text-align: center;"><a href="https://nonius.io/">nonius</a></td>
+<td style="text-align: center;"><a href="https://nonius.io/">nonius.io</a></td>
 <td style="text-align: center;">49-194</td>
 <td style="text-align: left;">- header-only <br> - depends on boost <br> - super statistics summary</td>
 <td style="text-align: left;">- confusing repo structure <br> - buggy example(s) <br> - confidence intervals fixed to <br> normal distribution <br> - no donotoptimize</td>
 </tr>
 <tr class="even">
-<td style="text-align: center;"><a href="https://github.com/google/benchmark">libbenchmark</a></td>
+<td style="text-align: center;"><a href="https://github.com/google/benchmark">google/benchmark</a></td>
 <td style="text-align: center;">1985</td>
 <td style="text-align: left;">- no dependencies <br> - feature rich</td>
 <td style="text-align: left;">- templated versus fixture based setup <br> - means reported by default</td>

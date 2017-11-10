@@ -1257,7 +1257,7 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 :]
 
 
-## libbenchmark
+## google/benchmark
 
 .container-fluid[
 
@@ -1299,7 +1299,7 @@ T. Hoefler et al, ["Scientific Benchmarking of Parallel Computing Systems - Twel
 
 .]
 
-## libbenchmark: in action
+## benchmark: in action
 
 .container-fluid[
 
@@ -1325,7 +1325,7 @@ __Question:__
 .]
 
 
-## libbenchmark: simple approach
+## benchmark: simple approach
 
 .container-fluid[
 
@@ -1399,7 +1399,7 @@ BENCHMARK_MAIN();
 
 .]
 
-## libbenchmark: simple approach output
+## benchmark: simple approach output
 
 ```
 Run on (4 X 3600 MHz CPU s)
@@ -1413,7 +1413,7 @@ BM_range_based       937344 ns     929681 ns        768
 ```
 
 
-## libbenchmark: advanced
+## benchmark: advanced
 
 .container-fluid[
 
@@ -1485,7 +1485,7 @@ BENCHMARK_TEMPLATE(BM_integer_index,int)
 
 :]
 
-## libbenchmark: advanced output
+## benchmark: advanced output
 
 ```
 Run on (4 X 3600 MHz CPU s)
@@ -1522,7 +1522,7 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 ```
 
 
-## libbenchmark: reproduce this!
+## benchmark: reproduce this!
 
 .container-fluid[
 
@@ -1530,16 +1530,20 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 
 .col[
 
-![gcc 6.4.1, libbbenchmark 1.3, <br>[code available in this repo](src/libbenchmark/README.md)](src/libbenchmark/comparison.png){ class="figure-img img-fluid" width="100%" }
+![gcc 6.4.1, libbbenchmark 1.3, <br>[code available in this repo](src/libbenchmark/README.md)](src/libbenchmark/comparison_O2.png){ class="figure-img img-fluid" width="100%" }
 
 .]
 
 .col[
 
-- interesting: Matt Godbolt's claim appears to depent on the data type of the container float/int 
-- food for thought: compiler or stdlib implementation or ...
 - file an [issue](https://github.com/psteinb/meetingcpp2017) if you reproduced this!
 
+```
+$ cd /path/to/sliderepo/src/libbenchmark
+$ //install libbenchmark & tidyverse R package
+$ CXXFLAGS=-O2 make report
+$ my-browser report.html
+```
 .]
 
 .]
@@ -1549,26 +1553,26 @@ BM_range_based<float>/134217728    122908318 ns  122219268 ns          6
 
 ## There is more
 
-------------------------- ------- --------------------------- ------------------------------------------
- [hayai][haylink]          229    - based on googletest <br>  - no csv output <br>                   
-                                  - random order <br>         - online docs? commit activity?<br>
-                                  - fixture support           - no donotoptimize <br>
-                                                              - max/min/means reported by default
+--------------------------------- ------- --------------------------- ------------------------------------------
+ [nickbruun/hayai][haylink]        229    - based on googletest <br>  - no csv output <br>                   
+                                          - random order <br>         - online docs? commit activity?<br>
+                                          - fixture support           - no donotoptimize <br>
+                                                                      - max/min/means reported by default
                                                                                                                                   
- [celero][cellink]         249    - no dependencies <br>      - no csv output <br>
-                                  - baseline <br>             - means reported by default
-                                  - fixture support           
+ [DigitalInBlue/celero][cellink]   249    - no dependencies <br>      - no csv output <br>
+                                          - baseline <br>             - means reported by default
+                                          - fixture support           
                                                               
- [nonius][nonlink]         49-194 - header-only <br>          - confusing repo structure <br>
-                                  - depends on boost <br>     - buggy example(s) <br>
-                                  - super statistics summary  - confidence intervals fixed to <br> 
-                                                                normal distribution <br>
-                                                              - no donotoptimize
+ [nonius.io][nonlink]              49-194 - header-only <br>          - confusing repo structure <br>
+                                          - depends on boost <br>     - buggy example(s) <br>
+                                          - super statistics summary  - confidence intervals fixed to <br> 
+                                                                        normal distribution <br>
+                                                                      - no donotoptimize
                                                                                            
- [libbenchmark][benlink]   1985   - no dependencies <br>      - templated versus fixture based setup <br>
-                                  - feature rich              - means reported by default  
+ [google/benchmark][benlink]       1985   - no dependencies <br>      - templated versus fixture based setup <br>
+                                          - feature rich              - means reported by default  
                            
-------------------------- ------- --------------------------- -------------------------------------------
+--------------------------------- ------- --------------------------- -------------------------------------------
 
 
 [haylink]: https://github.com/nickbruun/hayai
