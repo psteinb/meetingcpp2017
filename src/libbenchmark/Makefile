@@ -12,18 +12,21 @@ help:
 	echo "  run    .. run the benchmark which produces the input for the report"
 	echo "  report .. generate the report using rmarkdown"
 
-build : $TARGETS
+build : $(TARGETS)
 
 % : %.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< -o $@ ${BENCHMARK_ROOT}/lib/libbenchmark.a
 
-run : forloop_style_with_args_templated
+loops_compared.csv : forloop_style_with_args_templated
 	./$< --benchmark_filter=.*/134217728 --benchmark_repetitions=20 --benchmark_out_format=csv --benchmark_out=loops_compared.csv
 
-%.html : %.Rmd
+run : loops_compared.csv
+
+
+%.html : %.Rmd loops_compared.csv
 	Rscript -e "rmarkdown::render('$<')"
 
-%.pdf : %.Rmd
+%.pdf : %.Rmd loops_compared.csv
 	Rscript -e "rmarkdown::render('$<','pdf_document')"
 
 report : report.pdf report.html

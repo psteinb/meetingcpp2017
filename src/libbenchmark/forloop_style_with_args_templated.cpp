@@ -5,7 +5,7 @@
 template <typename T>
 double sum(const T* _data, std::size_t _len){
 
-    double value = 0;
+    double value = 0.;
     for(std::size_t i = 0;i<_len;++i)
         value += _data[i];
 
@@ -17,7 +17,7 @@ double sum(const container_type& _data){
 
     typedef typename container_type::value_type value_t;
 
-    double value = 0;
+    double value = 0.;
     for(const value_t& el : _data)
         value += el;
 
@@ -28,8 +28,10 @@ template <typename T>
 static void BM_integer_index(benchmark::State& state) {
 
     const std::size_t len = state.range(0);
-    std::vector<T> values(len,0.f);
-    double result = 0;
+
+    static const T base = 42;
+    std::vector<T> values(len,base);
+    double result = 0.;
 
     for (auto _ : state){
         benchmark::DoNotOptimize(result = sum(values.data(), len));
@@ -43,7 +45,8 @@ template <typename T>
 static void BM_range_based(benchmark::State& state) {
 
     const std::size_t len = state.range(0);
-    std::vector<T> values(len,0.f);
+    static const T base = 42;
+    std::vector<T> values(len,base);
     double result = 0;
 
     for (auto _ : state){
